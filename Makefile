@@ -1,16 +1,22 @@
-CC=gcc # explicitly set the c compiler
-CFLAGS= -Wall -Werror -Wextra -g
-CPPFLAGS= # c pre-processor flags (ex: -D_GNU_SOURCE)
-LDFLAGS= # linker flags
-LDLIBS= 
+# Makefile
 
-OBJ = traitment/main.o
+CC = gcc 
+CFLAGS = -Wall -Werror -Wextra -O3 `pkg-config --cflags sdl2 SDL2_image SDL2_ttf gtk+-3.0` -g
+CPPFLAGS =
+LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
+LDFLAGS= 
+
+OBJ = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
 
 all:traitement
-main_traitement: OBJ =
-main_traitement: traitement/main.o $(OBJ)
-	 $(CC) $< $(OBJ) -o main_traitement
+
+traitement: traitement/main.o $(OBJ)
+	$(CC) $(OBJ) traitement/main.o $(LDLIBS) -o main_traitement
+traitement/main.o: traitement/main.c
+	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
 clean:
 	$(RM) main_traitement
 	$(RM) $(OBJ)
+	
+#END
