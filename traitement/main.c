@@ -92,7 +92,7 @@ int main(int argc, char** argv)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     // - Create a window.
-    SDL_Window* window = SDL_CreateWindow("grayscale", 0, 0, INIT_WIDTH, INIT_HEIGHT,
+    SDL_Window* window = SDL_CreateWindow("Traitement", 0, 0, INIT_WIDTH, INIT_HEIGHT,
             SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     if (window == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
@@ -104,32 +104,82 @@ int main(int argc, char** argv)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     // - Create a surface from the colored image.
-    
-    SDL_Surface* surface = load_image(argv[1]);
+    SDL_Surface* temp_surface = load_image(argv[1]);
+    if (temp_surface == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+    size_t neww;
+    size_t newh;
+    size_t min_size = 1000;
+    if (temp_surface->w > temp_surface->h) {
+        newh = min_size;
+        neww = min_size*temp_surface->w/temp_surface->h;
+    }
+    else {
+        neww = min_size;
+        newh = min_size*temp_surface->h/temp_surface->w;
+    }
+    //printf("w%ld  h%ld\n", neww, newh);
+    SDL_Surface *surface = resize(temp_surface, neww, newh);
     if (surface == NULL)
+    {
         errx(EXIT_FAILURE, "%s", SDL_GetError());
+    }
 
-    // - Resize the window according to the size of the image.
-     
-    SDL_SetWindowSize(window, surface->w, surface->h);
-    if (window == NULL)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
+	SDL_SaveBMP(surface, "temp_files/colored.png");
 
-    // - Create a texture from the colored surface.
+	// - Create a texture from the colored surface.
     
     SDL_Texture* texture_colored = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture_colored == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
-    
+        
     // - Convert the surface into grayscale.
     
     surface_to_grayscale(surface);
 
-    // - Create a new texture from the grayscale surface.
+    SDL_SaveBMP(surface, "temp_files/grayscale.png");
+    
+    // - Create a texture from the colored surface.
     
     SDL_Texture* texture_grayscale = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture_grayscale == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
+     
+    
+     
+    // - Convert the surface into blur.
+    
+    for (int i = 0; i < 5; i++)
+        surface_to_blur(surface);
+    
+    SDL_SaveBMP(surface, "temp_files/blur.png");
+
+    // - Convert the surface into dilatation and erosion (dilero).
+    
+    surface_to_dilatation_and_erosion(surface);
+    
+    SDL_SaveBMP(surface, "temp_files/dilero.png");
+
+       
+    // - Convert the surface into sobel.
+    
+    surface_to_sobel(surface);
+    
+    SDL_SaveBMP(surface, "temp_files/sobel.png");
+
+    // - Convert the surface into binarization.
+    
+    surface_to_binarization(surface);
+
+    SDL_SaveBMP(surface, "temp_files/binarization.png");
+
+    // - Convert the surface into better analyse.
+       
+    surface_to_dilatation(surface);
+    surface_to_dilatation(surface);
+    surface_to_dilatation(surface);
+
+    SDL_SaveBMP(surface, "temp_files/analyse.png");
 
     // - Free the surface.
     

@@ -10,8 +10,8 @@ OBJ = traitement/blur.o traitement/binarization.o traitement/dilatation_and_eros
 
 all:traitement
 
-traitement: traitement/main.o $(OBJ)
-	$(CC) $(OBJ) traitement/main.o $(LDLIBS) -o main_traitement
+traitement: $(OBJ) 
+	$(CC) $(OBJ) $(LDLIBS) -o main_traitement
 traitement/main.o: traitement/main.c
 	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
