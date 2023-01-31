@@ -154,12 +154,6 @@ int main(int argc, char** argv)
     
     SDL_SaveBMP(surface, "temp_files/blur.png");
 
-    // - Convert the surface into dilatation and erosion (dilero).
-    
-    surface_to_dilatation_and_erosion(surface);
-    
-    SDL_SaveBMP(surface, "temp_files/dilero.png");
-
        
     // - Convert the surface into sobel.
     
@@ -173,13 +167,6 @@ int main(int argc, char** argv)
 
     SDL_SaveBMP(surface, "temp_files/binarization.png");
 
-    // - Convert the surface into better analyse.
-       
-    surface_to_dilatation(surface);
-    surface_to_dilatation(surface);
-    surface_to_dilatation(surface);
-
-    SDL_SaveBMP(surface, "temp_files/analyse.png");
 
     // - Free the surface.
     

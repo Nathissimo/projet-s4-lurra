@@ -17,6 +17,7 @@ traitement/main.o: traitement/main.c
 
 clean:
 	$(RM) main_traitement
+	$(RM) temp_files/*
 	$(RM) $(OBJ)
 	
 #END
