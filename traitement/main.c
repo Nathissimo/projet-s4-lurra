@@ -25,7 +25,7 @@ void draw(SDL_Renderer* renderer, SDL_Texture* texture)
 // renderer: Renderer to draw on.
 // colored: Texture that contains the colored image.
 // grayscale: Texture that contains the grayscale image.
-void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* grayscale)
+void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* last)
 {
     SDL_Texture* t = colored;
 
@@ -49,9 +49,9 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* grays
 
 	    case SDL_KEYDOWN:
 		if (t == colored)
-			t = grayscale;
+			t = last;
 		else
-			t = colored;
+			t = last;
 		draw(renderer, t);
 		break;
         }
@@ -138,14 +138,6 @@ int main(int argc, char** argv)
     surface_to_grayscale(surface);
 
     SDL_SaveBMP(surface, "temp_files/grayscale.png");
-    
-    // - Create a texture from the colored surface.
-    
-    SDL_Texture* texture_grayscale = SDL_CreateTextureFromSurface(renderer, surface);
-    if (texture_grayscale == NULL)
-        errx(EXIT_FAILURE, "%s", SDL_GetError());
-     
-    
      
     // - Convert the surface into blur.
     
@@ -166,7 +158,12 @@ int main(int argc, char** argv)
     surface_to_binarization(surface);
 
     SDL_SaveBMP(surface, "temp_files/binarization.png");
-
+    
+    // - Create a texture from the colored surface.
+    
+    SDL_Texture* texture_last = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_last == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     // - Free the surface.
     
@@ -175,11 +172,11 @@ int main(int argc, char** argv)
     // - Dispatch the events.
     
     draw(renderer, texture_colored); //draw here because draw in event_loop don't make it right
-    event_loop(renderer, texture_colored, texture_grayscale);
+    event_loop(renderer, texture_colored, texture_last);
 
     // - Destroy the objects.
 
-    SDL_DestroyTexture(texture_grayscale);
+    SDL_DestroyTexture(texture_last);
     SDL_DestroyTexture(texture_colored);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

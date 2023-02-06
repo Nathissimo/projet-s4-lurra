@@ -8,18 +8,29 @@ LDFLAGS=
 
 OBJ = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
 
+EXE = main_traitement
+
+FOLDER = rmdir -rf temp_files/
+
 all:traitement
+
+temp_files/info.txt:
+	mkdir temp_files
+	touch temp_files/info.txt
+tempfiles: temp_files/info.txt
+	touch temp_files/info.txt
+
 
 traitement: CFLAGS += `pkg-congif --cflags sdl2 SDL2_image`
 traitement: LDLIBS += -lm `pkg-config --libs sdl2 SDL2_image`
-traitement: $(OBJ) 
+traitement: $(OBJ) tempfiles
 	$(CC) $(OBJ) $(LDLIBS) -o main_traitement
 traitement/main.o: traitement/main.c
 	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
 clean:
-	$(RM) main_traitement
-	$(RM) temp_files/*
+	$(RM) $(FOLDER)
 	$(RM) $(OBJ)
+	$(RM) $(EXE)
 	
 #END
