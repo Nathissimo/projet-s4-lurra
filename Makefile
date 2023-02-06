@@ -6,7 +6,10 @@ CPPFLAGS =
 LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
 LDFLAGS=
 
-OBJ = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
+traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
+
+OBJ = $(traitementobj)
+
 
 EXE = main_traitement
 
@@ -20,11 +23,10 @@ temp_files/info.txt:
 tempfiles: temp_files/info.txt
 	touch temp_files/info.txt
 
-
 traitement: CFLAGS += `pkg-congif --cflags sdl2 SDL2_image`
 traitement: LDLIBS += -lm `pkg-config --libs sdl2 SDL2_image`
-traitement: $(OBJ) tempfiles
-	$(CC) $(OBJ) $(LDLIBS) -o main_traitement
+traitement: $(traitementobj) tempfiles
+	$(CC) $(traitementobj) $(LDLIBS) -o main_traitement
 traitement/main.o: traitement/main.c
 	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
