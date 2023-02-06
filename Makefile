@@ -6,7 +6,7 @@ CPPFLAGS =
 LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
 LDFLAGS=
 
-traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
+traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/fill.o traitement/main.o
 
 OBJ = $(traitementobj)
 

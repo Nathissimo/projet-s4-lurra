@@ -8,6 +8,7 @@
 #include "grayscale.h"
 #include "sobel.h"
 #include "rescale.h"
+#include "fill.h"
 
 
 // Updates the display.
@@ -51,7 +52,7 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* last)
 		if (t == colored)
 			t = last;
 		else
-			t = last;
+			t = colored;
 		draw(renderer, t);
 		break;
         }
@@ -158,6 +159,12 @@ int main(int argc, char** argv)
     surface_to_binarization(surface);
 
     SDL_SaveBMP(surface, "temp_files/binarization.png");
+
+    // - Convert the surface into filled.
+    
+    surface_to_fill(surface);
+
+    SDL_SaveBMP(surface, "temp_files/fill.png");
     
     // - Create a texture from the colored surface.
     
