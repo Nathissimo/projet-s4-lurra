@@ -6,7 +6,7 @@
 #ifndef FILL_H
 #define FILL_H
 
-void fill(Uint32* pixels, int x, int width, int height, long len, SDL_PixelFormat* format, Uint8 colorR, Uint8 colorG, Uint8 colorB);
+void fill(Uint32* pixels, size_t x, size_t width, size_t height, size_t len, SDL_PixelFormat* format, Uint8 colorR, Uint8 colorG, Uint8 colorB);
 
 void surface_to_fill(SDL_Surface* surface);
 
