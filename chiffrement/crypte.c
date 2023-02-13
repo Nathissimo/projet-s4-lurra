@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <err.h>
 
 #include "basics.h"
 
@@ -99,16 +100,17 @@ char* decrypte ( unsigned long* message, struct UserKey* userkey, char* old )
 
 
 
-int main (void)
+int main (int argc , char * argv[])
 {
 	
-
+	if ( argc != 2 ) 
+		err ( 1 , " usage : message");
 	struct UserKey UserKey;
 
 	init_key ( &UserKey);
 	
 
-	char* mes ="mfeqsF Qef\n mfelqjfiqm\r lfej ";
+	char* mes =argv[1];
 	unsigned long* res = encryption ( mes , &UserKey);
 	char* res2 = decrypte ( res, &UserKey, mes);
 
