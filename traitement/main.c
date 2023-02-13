@@ -9,6 +9,7 @@
 #include "sobel.h"
 #include "rescale.h"
 #include "fill.h"
+#include "contrast.h"
 
 
 // Updates the display.
@@ -26,7 +27,7 @@ void draw(SDL_Renderer* renderer, SDL_Texture* texture)
 // renderer: Renderer to draw on.
 // colored: Texture that contains the colored image.
 // grayscale: Texture that contains the grayscale image.
-void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* last)
+void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* contrast, SDL_Texture* grayscale, SDL_Texture* blur, SDL_Texture* dilero, SDL_Texture* sobel, SDL_Texture* bina, SDL_Texture* fill, SDL_Texture* last)
 {
     SDL_Texture* t = colored;
 
@@ -41,20 +42,44 @@ void event_loop(SDL_Renderer* renderer, SDL_Texture* colored, SDL_Texture* last)
         switch (event.type)
         {
             case SDL_QUIT:
-		return;
-	
-	    case SDL_WINDOWEVENT:
-		if (event.window.event == SDL_WINDOWEVENT_RESIZED)
-			draw(renderer, t);
-		break;
+				return;
+		
+			case SDL_WINDOWEVENT:
+				if (event.window.event == SDL_WINDOWEVENT_RESIZED)
+					draw(renderer, t);
+				break;
+			
+			case SDL_KEYDOWN:
+			
+				if (event.key.keysym.sym == SDLK_a)
+					t = colored;
+					
+                else if (event.key.keysym.sym == SDLK_z)
+					t = contrast;
 
-	    case SDL_KEYDOWN:
-		if (t == colored)
-			t = last;
-		else
-			t = colored;
-		draw(renderer, t);
-		break;
+				else if (event.key.keysym.sym == SDLK_e)
+					t = grayscale;
+					
+				else if (event.key.keysym.sym == SDLK_r)
+					t = blur;
+					
+				else if (event.key.keysym.sym == SDLK_t)
+					t = dilero;
+
+				else if (event.key.keysym.sym == SDLK_y)
+					t = sobel;
+					
+				else if (event.key.keysym.sym == SDLK_u)
+					t = bina;
+					
+				else if (event.key.keysym.sym == SDLK_i)
+					t = fill;
+					
+				else
+					t = last;
+
+				draw(renderer, t);
+				break;
         }
     }
 }
@@ -85,7 +110,7 @@ int main(int argc, char** argv)
 	const int INIT_HEIGHT = 400;
 
     // Checks the number of arguments.
-    if (argc != 2)
+    if (argc != 2 && argc != 3)
         errx(EXIT_FAILURE, "Usage: image-file");
 
     // - Initialize the SDL.
@@ -119,7 +144,7 @@ int main(int argc, char** argv)
         neww = min_size;
         newh = min_size*temp_surface->h/temp_surface->w;
     }
-    //printf("w%ld  h%ld\n", neww, newh);
+    
     SDL_Surface *surface = resize(temp_surface, neww, newh);
     if (surface == NULL)
     {
@@ -134,13 +159,29 @@ int main(int argc, char** argv)
     if (texture_colored == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
         
+    // - Convert the surface with more contrast
+
+    delete_contrast (surface, 50);
+
+    SDL_SaveBMP(surface, "temp_files/contrast.png");
+
+    SDL_Texture* texture_contrast = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_contrast == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+     
+    printf("Contrast \n");
+
     // - Convert the surface into grayscale.
     
     surface_to_grayscale(surface);
 
     SDL_SaveBMP(surface, "temp_files/grayscale.png");
+    
+    SDL_Texture* texture_gray = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_gray == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
      
-    printf("grayscale \n");
+    printf("Grayscale \n");
 
     // - Convert the surface into blur.
     
@@ -149,13 +190,33 @@ int main(int argc, char** argv)
     
     SDL_SaveBMP(surface, "temp_files/blur.png");
 
+	SDL_Texture* texture_blur = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_blur == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
     printf("Blur \n");
+
+	// - Convert the surface into dilero
+	
+	surface_to_dilatation_and_erosion(surface);
+
+	SDL_SaveBMP(surface, "temp_files/dilero.png");
+
+	SDL_Texture* texture_dilero = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_dilero == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+        
+    printf("Dilero \n");
 
     // - Convert the surface into sobel.
     
     surface_to_sobel(surface);
     
     SDL_SaveBMP(surface, "temp_files/sobel.png");
+
+	SDL_Texture* texture_sobel = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_sobel == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
 
     printf("Sobel \n");
 
@@ -165,18 +226,30 @@ int main(int argc, char** argv)
 
     SDL_SaveBMP(surface, "temp_files/binarization.png");
 
+	SDL_Texture* texture_binarization = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_binarization == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
+
     printf("Binarization \n");
+
+
 
     // - Convert the surface into filled.
     
-    surface_to_fill(surface);
+    if (argc == 3)
+        surface_to_fill(surface);
 
     SDL_SaveBMP(surface, "temp_files/fill.png");
+    
+    SDL_Texture* texture_fill = SDL_CreateTextureFromSurface(renderer, surface);
+    if (texture_fill == NULL)
+        errx(EXIT_FAILURE, "%s", SDL_GetError());
     
     printf("fill \n");
 
     // - Create a texture from the colored surface.
     
+        
     SDL_Texture* texture_last = SDL_CreateTextureFromSurface(renderer, surface);
     if (texture_last == NULL)
         errx(EXIT_FAILURE, "%s", SDL_GetError());
@@ -188,10 +261,16 @@ int main(int argc, char** argv)
     // - Dispatch the events.
     
     draw(renderer, texture_colored); //draw here because draw in event_loop don't make it right
-    event_loop(renderer, texture_colored, texture_last);
+    event_loop(renderer, texture_colored, texture_contrast, texture_gray, texture_blur, texture_dilero, texture_sobel, texture_binarization, texture_fill, texture_last);
 
     // - Destroy the objects.
 
+	SDL_DestroyTexture(texture_gray);
+	SDL_DestroyTexture(texture_blur);
+	SDL_DestroyTexture(texture_dilero);
+	SDL_DestroyTexture(texture_sobel);
+	SDL_DestroyTexture(texture_binarization);
+	SDL_DestroyTexture(texture_fill);
     SDL_DestroyTexture(texture_last);
     SDL_DestroyTexture(texture_colored);
     SDL_DestroyRenderer(renderer);

@@ -119,7 +119,7 @@ int main (int argc , char * argv[])
 	printf ( "Message to send : %s\n", mes);
 	printf ( "Message after encryption : ");
 	
-	for (size_t i ; *(res+i) != 0 ; i++)
+	for (size_t i = 0; *(res+i) != 0 ; i++)
 	{
 		printf ( "%ld ", *(res+i));
 	}

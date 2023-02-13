@@ -6,16 +6,18 @@ CPPFLAGS =
 LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
 LDFLAGS=
 
-traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/fill.o traitement/main.o
+traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/fill.o traitement/contrast.o traitement/main.o
 
-OBJ = $(traitementobj)
+crypteobj = chiffrement/basics.o chiffrement/crypte.o
+
+OBJ = $(traitementobj) $(crypteobj)
 
 
-EXE = main_traitement
+EXE = main_traitement crypte
 
 FOLDER = rmdir -rf temp_files/
 
-all:traitement
+all: traitement crypte
 
 temp_files/info.txt:
 	mkdir temp_files
@@ -29,6 +31,12 @@ traitement: $(traitementobj) tempfiles
 	$(CC) $(traitementobj) $(LDLIBS) -o main_traitement
 traitement/main.o: traitement/main.c
 	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
+
+crypte: LDFLAGS += -Wall -Wextra -lm
+crypte: LDLIBS += -lm
+crypte:  $(crypteobj)
+	$(CC) $(crypteobj) $(LDLIBS) -o crypte
+
 
 clean:
 	$(RM) $(FOLDER)
