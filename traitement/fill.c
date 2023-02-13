@@ -5,31 +5,34 @@
 #include <math.h>
 
 
-void fill(Uint32* pixels, int x, int width, int height, SDL_PixelFormat* format, Uint8 colorR, Uint8 colorG, Uint8 colorB)
+void fill(Uint32* pixels, int x, int width, int height,int len, SDL_PixelFormat* format, Uint8 colorR, Uint8 colorG, Uint8 colorB)
 {
+	Uint8 actr, actg, actb;
+	SDL_GetRGB(pixels[x], format, &actr, &actg, &actb);
+	if (actr != 0 || actg != 0 || actb != 0)
+		return;
+
+	//printf("x : %i\n",x);
+
 	pixels[x] = SDL_MapRGB(format, colorR,colorG,colorB);
-	if (x % 100 == 0)
-		printf("x = %i\n", x);
+
 	int placeX = x / width;
 	int placeY = x % width;
-	
-	Uint8 actr, actg, actb;
 
-	for (int i = - NEIGHBOURD; i <= NEIGHBOURD; i++)
+	if (placeX-1 >= 0)
 	{
-		for (int j = - NEIGHBOURD; j <= NEIGHBOURD; j++)
-		{
-			if (placeX + i >= 0 && placeX + i < height &&
-				placeY + j >= 0 && placeY + j < width &&
-				i != j)
-			{
-				SDL_GetRGB(
-                    pixels[((placeX+i)*width)+placeY+j], format, &actr, &actg, &actb);
-				if (actr == 255 && actg == 255 && actb == 255)
-					fill(pixels,((placeX+i)*width)+placeY+j,width,height,format, colorR, colorB, colorG);
-			}
-		}
+		//printf("up x : %i\n",x);
+		fill(pixels,(placeX+1)*width+placeY,width,height,len,format,colorR,colorG,colorB);
 	}
+
+	if (placeX+1 < height)
+		fill(pixels,(placeX+1)*width+placeY,width,height,len,format,colorR,colorG,colorB);
+
+	if (placeY-1 >= 0)
+		fill(pixels,placeX*width+placeY-1,width,height,len,format,colorR,colorG,colorB);
+	
+	if (placeY+1 < width)
+		fill(pixels,placeX*width+placeY+1,width,height,len,format,colorR,colorG,colorB);
 }
 
 
@@ -43,17 +46,35 @@ void surface_to_fill(SDL_Surface* surface)
     int width = surface->w;
     
     int height = surface->h;
-	
+
     SDL_PixelFormat* format = surface->format;
 
     SDL_LockSurface(surface);
 
+
+
     for (int i = 0; i < len; i++)
     {
+		//printf("i : %i\n",i);
 		Uint8 r, g, b;
 		SDL_GetRGB(pixels[i], format, &r, &g, &b);
-		if (r == 255 && g == 255 && b == 255)
-	    	fill(pixels, i, width, height, format, i*10, i+10, i*5);
+		//printf("r: %i g : %i b : %i\n",r,g,b);
+		if (r == 0 && g == 0 && b == 0)
+		{
+			if ((i+20)% 256 == 0)
+				fill(pixels, i, width, height, len, format, (i+10)% 256, 0, 0);
+			else
+				fill(pixels, i, width, height, len, format, (i+10)% 256, 0, 0);
+		}
+
+
+			/*
+			if (i%50 == 0 && i%150 == 0 && i%256 == 0)
+				fill(pixels, i, width, height, len, format, i%50, i%150, i%256);
+			else
+				fill(pixels, i, width, height, len, format, (i+1)%50, (i+1)%150, (i+1)%256);
+			*/
+
 	}
     SDL_UnlockSurface(surface); 
 }

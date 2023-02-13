@@ -140,6 +140,8 @@ int main(int argc, char** argv)
 
     SDL_SaveBMP(surface, "temp_files/grayscale.png");
      
+    printf("grayscale \n");
+
     // - Convert the surface into blur.
     
     for (int i = 0; i < 5; i++)
@@ -147,12 +149,15 @@ int main(int argc, char** argv)
     
     SDL_SaveBMP(surface, "temp_files/blur.png");
 
-       
+    printf("Blur \n");
+
     // - Convert the surface into sobel.
     
     surface_to_sobel(surface);
     
     SDL_SaveBMP(surface, "temp_files/sobel.png");
+
+    printf("Sobel \n");
 
     // - Convert the surface into binarization.
     
@@ -160,12 +165,16 @@ int main(int argc, char** argv)
 
     SDL_SaveBMP(surface, "temp_files/binarization.png");
 
+    printf("Binarization \n");
+
     // - Convert the surface into filled.
     
     surface_to_fill(surface);
 
     SDL_SaveBMP(surface, "temp_files/fill.png");
     
+    printf("fill \n");
+
     // - Create a texture from the colored surface.
     
     SDL_Texture* texture_last = SDL_CreateTextureFromSurface(renderer, surface);

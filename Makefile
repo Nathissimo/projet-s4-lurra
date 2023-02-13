@@ -23,7 +23,7 @@ temp_files/info.txt:
 tempfiles: temp_files/info.txt
 	touch temp_files/info.txt
 
-traitement: CFLAGS += `pkg-congif --cflags sdl2 SDL2_image`
+traitement: CFLAGS += `pkg-config --cflags sdl2 SDL2_image`
 traitement: LDLIBS += -lm `pkg-config --libs sdl2 SDL2_image`
 traitement: $(traitementobj) tempfiles
 	$(CC) $(traitementobj) $(LDLIBS) -o main_traitement
