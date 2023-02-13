@@ -111,21 +111,23 @@ int main (void)
 	char* mes ="mfeqsF Qef\n mfelqjfiqm\r lfej ";
 	unsigned long* res = encryption ( mes , &UserKey);
 	char* res2 = decrypte ( res, &UserKey, mes);
-	
-	
 
-
-	printf ( "Key Public (%lu , %lu)\n", UserKey.Public->nb1, UserKey.Public->nb2);
-	printf ( "Key Private (%lu , %lu)\n", UserKey.Private->nb1, UserKey.Private->nb2);
-	printf ( "Message origine === %s\n", mes);
-//	printf ( "Message after encrypte : %s\n", res);	
-	printf ( "Message after crypte : %s\n", res2);
+	printf ( "Key Public : (%lu , %lu)\n", UserKey.Public->nb1, UserKey.Public->nb2);
+	printf ( "Key Private : (%lu , %lu)\n", UserKey.Private->nb1, UserKey.Private->nb2);
+	printf ( "Message to send : %s\n", mes);
+	printf ( "Message after encryption :");
+	for (size_t i ; *(res+i) != 0 ; i++)
+	{
+		printf ( "%lu ", *(res+i));
+	}
+	printf ("\n");
+	printf ( "Message after decryption : %s\n", res2);
 	
 	size_t i =0;
 	for ( ; i< strlen(mes)+1; i++)
 	{
 		if ( *(mes) != *(res2))
-			printf ("TRUE\n");
+			printf ("FALSE\n");
 	}
 	if ( i == strlen(mes)+1)
 		printf ("TRUE\n");
