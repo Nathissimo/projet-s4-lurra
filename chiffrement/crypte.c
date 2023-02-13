@@ -104,7 +104,7 @@ int main (int argc , char * argv[])
 {
 	
 	if ( argc != 2 ) 
-		err ( 1 , " usage : message");
+		err ( 1 , " usage : message\n");
 	struct UserKey UserKey;
 
 	init_key ( &UserKey);
@@ -117,10 +117,11 @@ int main (int argc , char * argv[])
 	printf ( "Key Public : (%lu , %lu)\n", UserKey.Public->nb1, UserKey.Public->nb2);
 	printf ( "Key Private : (%lu , %lu)\n", UserKey.Private->nb1, UserKey.Private->nb2);
 	printf ( "Message to send : %s\n", mes);
-	printf ( "Message after encryption :");
+	printf ( "Message after encryption : ");
+	
 	for (size_t i ; *(res+i) != 0 ; i++)
 	{
-		printf ( "%lu ", *(res+i));
+		printf ( "%ld ", *(res+i));
 	}
 	printf ("\n");
 	printf ( "Message after decryption : %s\n", res2);
