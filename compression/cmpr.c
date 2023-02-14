@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
+//#include <png.h>
 
 #include "cmpr.h"
 
@@ -15,6 +16,7 @@ comprime rle(int *image, int lon, int lag)
     int act;
     for (int i=0; i<(lon*lag); i++)
     {
+        //printf("%i\n", prec);
         act = image[i];
         if (prec == act)
         {
@@ -29,7 +31,7 @@ comprime rle(int *image, int lon, int lag)
 
         else
         {
-
+            //printf("suite:%i   prnb:%i\n", suite, prec);
             img = (img*10)+suite;
             img = (img*10)+prec;
             suite = 1;
@@ -50,7 +52,7 @@ comprime rle(int *image, int lon, int lag)
     return (rslt);
 }
 
-void *derle(comprime rslt, int*image)
+void derle(comprime rslt, int*image)
 {
     unsigned long int img = rslt.donnee;
 
@@ -60,7 +62,7 @@ void *derle(comprime rslt, int*image)
     int j=rslt.lag;
     while (img>0)
     {
-        printf("%lu\n", img);
+        //printf("%lu\n", img);
         nb = img%10;
         img = img/10;
         suite = img%10;
@@ -90,40 +92,35 @@ void *derle(comprime rslt, int*image)
     //}
 }
 
+
 int main(int argc, char *argv[])
 {
-    FILE *fichier = NULL;
-    fichier = fopen("test.png", "r");
+    //int tab[24];
+    //unsigned int lon = 4;
+    //unsigned int lag = 6;
 
-    int caractereActuel = 0;
-    if (fichier != NULL)
-    {
-        do
-        {
-            caractereActuel = fgetc(fichier); 
-            printf("%c", caractereActuel);
-        } while (caractereActuel != EOF);
-    }
-    else
-        printf("fichier non lu\n");
-
-
-
-
-
-    int fclose(fichier);
-
-    return 1;
-
-
-
-
-
+    //if (argv[2] == "test.png")
+    //{
+    //    int tab[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0};
+    unsigned int lon = 3;
+    unsigned int lag = 4;
+    //}
+    //if (argv[2]=="test2.png")
+    //{
     int tab[] = {0,0,0,0,1,1,1,0,1,0,0,0};//12
+    //}
     //int tab[] = {1,1,0,0,0,0};//6
     //int tab[] = {2,6,75,0,1,1,1,0,1,10,0,550,8,2};//14
-    unsigned int lon = 4;
-    unsigned int lag = 3;
+    for (int i=0; i<(lon); i++)
+    {
+        printf("[");
+        int j;
+        for (j=0; j<(lag); j++)
+        {
+            printf("%i, ", tab[i*lag+j]);
+        }
+        printf("]\n");
+    }
 
     comprime rst = rle(tab, lon, lag);
 
