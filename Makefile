@@ -1,23 +1,46 @@
 # Makefile
 
 CC = gcc 
-CFLAGS = -Wall -Werror -Wextra -O3 `pkg-config --cflags sdl2 SDL2_image SDL2_ttf gtk+-3.0` -g
+CFLAGS = -Wall -Wextra -O3 # `pkg-config --cflags sdl2 SDL2_image SDL2_ttf gtk+-3.0`
 CPPFLAGS =
-LDLIBS = -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
-LDFLAGS= 
+LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
+LDFLAGS=
 
-OBJ = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/main.o
+traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/fill.o traitement/contrast.o traitement/main.o
 
-all:traitement
+crypteobj = chiffrement/basics.o chiffrement/crypte.o
 
-traitement: $(OBJ) 
-	$(CC) $(OBJ) $(LDLIBS) -o main_traitement
+OBJ = $(traitementobj) $(crypteobj)
+
+
+EXE = main_traitement crypte
+
+FOLDER = rmdir -rf temp_files/
+
+all: traitement crypte
+
+temp_files/info.txt:
+	mkdir temp_files
+	touch temp_files/info.txt
+tempfiles: temp_files/info.txt
+	touch temp_files/info.txt
+
+traitement: CFLAGS += `pkg-config --cflags sdl2 SDL2_image`
+traitement: LDLIBS += -lm `pkg-config --libs sdl2 SDL2_image`
+traitement: $(traitementobj) tempfiles
+	$(CC) $(traitementobj) $(LDLIBS) -o main_traitement
 traitement/main.o: traitement/main.c
 	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
+crypte: LDFLAGS += -Wall -Wextra -lm
+crypte: LDLIBS += -lm
+crypte:  $(crypteobj)
+	$(CC) $(crypteobj) $(LDLIBS) -o crypte
+
+
 clean:
-	$(RM) main_traitement
-	$(RM) temp_files/*
+	$(RM) $(FOLDER)
 	$(RM) $(OBJ)
+	$(RM) $(EXE)
 	
 #END

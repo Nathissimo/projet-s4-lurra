@@ -41,7 +41,8 @@ unsigned long Pow_and_Mod ( unsigned long long number,size_t exp , size_t m )
 	
 	while ( exp > 0)
 	{
-		if ( (exp & 1) > 0) res = (res * number) % m;
+		if ( (exp & 1) > 0) 
+			res = (res * number) % m;
 		exp >>=1;
 		number = (number * number) % m;
 	}
