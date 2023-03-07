@@ -8,7 +8,7 @@
 #include <time.h>
 
 
-int nb_iteration = 20;
+int nb_iteration = 10;
 
 SDL_Surface* load_image(const char* path)
 
@@ -149,8 +149,8 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	for ( int i = 0 ; i < k ; i++ )
 	{
 		nb += nb_pixels[i];
-				printf ("nb_pixels %li\n", nb_pixels[i]);
-		/*		printf ("moyen[%i] = %li \n", i*3, moyen[i*3]);
+		/*		printf ("nb_pixels %li\n", nb_pixels[i]);
+				printf ("moyen[%i] = %li \n", i*3, moyen[i*3]);
 				printf ("moyen[%i] = %li \n", i*3+1, moyen[i*3+1]);
 				printf ("moyen[%i] = %li \n", i*3+2, moyen[i*3+2]);*/
 	}
@@ -230,7 +230,7 @@ int k_moyen (int argv, char** argc)
 			SDL_Color color1 = all_color[i];
 			SDL_Color color2 = all_color[j];
 
-			if ( distance_color( color1 , color2 )  < 2 ) 
+			if ( distance_color( color1 , color2 )  ==  0 ) 
 
 			{
 
@@ -244,7 +244,7 @@ int k_moyen (int argv, char** argc)
 
 				temp1  = temp1 % (Row * Col);
 				SDL_Color color_temp1;
-				SDL_GetRGB ( temp1, surface->format , &color_temp1.r, &color_temp1.g, &color_temp1.b );
+				SDL_GetRGB ( pixels[temp1], surface->format , &color_temp1.r, &color_temp1.g, &color_temp1.b );
 				all_color[i] = color_temp1;
 				i--;
 				break;
@@ -271,25 +271,8 @@ int k_moyen (int argv, char** argc)
 	// first iteration for created zone
 	for (int i =0 ; i< len ; i++)
 	{
-		//must delete
-	        int t = 0;
-		for ( int j = 0 ; j< k ; j++)
-		{
-			if ( i == pix[j] )
-			{
-				SDL_Color tem = all_color[j];
-				res_pixels[i] = SDL_MapRGB ( res_surface->format, tem.r , tem.g, tem.b);
-				t = 1;	
-				break;
-			}
-		}
-
-		if ( t == 0)
-		{
-			// choose the color of pixels 
-			SDL_Color best_color = Choose_Color ( surface, all_color, i , k );
-			res_pixels [i] = SDL_MapRGB ( res_surface->format, best_color.r, best_color.g, best_color.b );
-		}
+		SDL_Color best_color = Choose_Color ( surface, all_color, i , k );
+		res_pixels [i] = SDL_MapRGB ( res_surface->format, best_color.r, best_color.g, best_color.b );
 
 	}
 
@@ -319,6 +302,8 @@ int k_moyen (int argv, char** argc)
 			res_pixels [j] = SDL_MapRGB ( res_surface->format, best_color.r, best_color.g, best_color.b );
 		}
 		printf ("%i \n", i);
+
+
 
 
 	}
