@@ -10,6 +10,18 @@
 
 int nb_iteration = 10;
 
+SDL_Surface* RedimensionnerImage(SDL_Surface* surface, int largeur, int hauteur)
+{
+    SDL_Surface* surfaceRedimensionnee = NULL;
+
+    surfaceRedimensionnee = SDL_CreateRGBSurface(0, largeur, hauteur, 32, 0, 0, 0, 0);
+
+    SDL_SoftStretch(surface, NULL, surfaceRedimensionnee, NULL);
+
+    return surfaceRedimensionnee;
+}
+
+
 SDL_Surface* load_image(const char* path)
 
 {
@@ -44,21 +56,7 @@ void Random ( int* pix, SDL_Surface* surface, int k)
 
 		pix[i] = temp1 % (Row * Col);
 	}
-
-
 }
-/*
-   int Covert_RGB_Hexa ( SDL_Color original_color)
-   {
-   int color = original_color.r;
-   color = color << 8;
-   color += original_color.g;
-   color = color << 8;
-   color += original_color.b;
-   return color;
-
-   }
-   */
 
 float distance_color (SDL_Color color1, SDL_Color color2)
 {
@@ -192,6 +190,10 @@ int k_moyen (int argv, char** argc)
 
 	SDL_Surface* surface = load_image( argc[1]);
 
+	int baseh = surface->h;
+	int basew = surface->w;
+	surface = RedimensionnerImage(surface, 600, 400);
+
 	int k = strtoul (argc[2], NULL, 10);	
 
 	int* pix = malloc ( sizeof(int) * k); 
@@ -307,11 +309,13 @@ int k_moyen (int argv, char** argc)
 
 
 	}
+	
+	res_surface = RedimensionnerImage(res_surface, baseh, basew);
 
 	SDL_SaveBMP(res_surface , "new_surface.bmp");
 	SDL_SaveBMP(surface , "old_surface.bmp");
 
-	printf ("Hello\n");
+	printf ("K-moyen just finished !\n");
 	//Free all element
 
 	//free (pix);
