@@ -5,20 +5,9 @@
 #include <string.h>
 #include <err.h>
 
-#include "basics.h"
+#include "crypte.h"
 
 
-struct Key
-{
-        size_t nb1;
-        size_t nb2;
-};
-
-struct UserKey
-{
-	struct Key* Public;
-	struct Key* Private;
-};
 
 
 void init_key (struct UserKey* UserKey)
@@ -98,8 +87,55 @@ char* decrypte ( unsigned long* message, struct UserKey* userkey, char* old )
         return encrypte;
 }
 
+int created_Key ( struct data_reseau* data_reseau)
+{
+	struct UserKey UserKey;
+	init_key ( &UserKey);
+	//add created key int data_reseau
+	
+	
+	return 1;
+}
 
 
+int fct_main (char * path)
+{
+        struct UserKey UserKey;
+
+        init_key ( &UserKey);
+
+
+        char* mes =path;
+        unsigned long* res = encryption ( mes , &UserKey);
+        char* res2 = decrypte ( res, &UserKey, mes);
+
+        printf ( "Key Public : (%lu , %lu)\n", UserKey.Public->nb1, UserKey.Public->nb2);
+        printf ( "Key Private : (%lu , %lu)\n", UserKey.Private->nb1, UserKey.Private->nb2);
+        printf ( "Message to send : %s\n", mes);
+        printf ( "Message after encryption : ");
+
+        for (size_t i = 0; *(res+i) != 0 ; i++)
+        {
+                printf ( "%ld ", *(res+i));
+        }
+        printf ("\n");
+        printf ( "Message after decryption : %s\n", res2);
+
+        size_t i =0;
+        for ( ; i< strlen(mes)+1; i++)
+        {
+                if ( *(mes) != *(res2))
+                        printf ("FALSE\n");
+        }
+        if ( i == strlen(mes)+1)
+                printf ("TRUE\n");
+
+        return 1;
+	
+}
+
+
+/*
 int main (int argc , char * argv[])
 {
 	
@@ -138,4 +174,4 @@ int main (int argc , char * argv[])
 	return 1;
 }
 
-
+*/

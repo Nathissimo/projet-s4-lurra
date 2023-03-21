@@ -155,7 +155,7 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	if ( nb != len  ) 
 	{
 		printf ("%i != %i \n", nb ,  len);
-		errx ( 1,  "Tout les pixels ne sont pas pris en consideration");
+		printf( "Tout les pixels ne sont pas pris en consideration\n");
 	}
 
 
@@ -164,6 +164,13 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	//make moyen with two arrays and replace th evalue in arrays ( all_color) 
 	for ( int i = 0 ; i< k ; i++)
 	{
+		if ( nb_pixels[i] == 0)
+                {
+                        continue;
+
+                }
+
+		
 		SDL_Color temp_color;
 		temp_color.r = moyen[i*3] / nb_pixels[i];
 		temp_color.g = moyen[i*3+1] / nb_pixels[i];
