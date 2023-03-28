@@ -139,6 +139,7 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	}
 
     }
+
     // verifie si tt les pixels sont pris en compte
     // on doit le supprimer
 
@@ -170,6 +171,7 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	temp_color.r = moyen[i*3] / nb_pixels[i];
 	temp_color.g = moyen[i*3+1] / nb_pixels[i];
 	temp_color.b = moyen[i*3+2] / nb_pixels[i];
+
 	all_color[i] = temp_color;
 
     }
