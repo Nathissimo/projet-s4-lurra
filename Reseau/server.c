@@ -63,43 +63,43 @@ void echo(int fd_in, int fd_out)
     return;
 
 }
-	
+
 
 
 void send_mess ( data_reseau* data_reseau, int cfd )
 {
 
-	char info[] = "if you want to send a message:\nwrite the name of the person then the message\n";
-	rewrite(cfd , info, strlen (info));	
-	while (1)
-	{	
-		char buffer[MAX_LETTER+1];
-		ssize_t r = read (cfd, buffer , MAX_LETTER);
-		char exit[] = "exit\n";
+    char info[] = "if you want to send a message:\nwrite the name of the person then the message\n";
+    rewrite(cfd , info, strlen (info));	
+    while (1)
+    {	
+        char buffer[MAX_LETTER+1];
+        ssize_t r = read (cfd, buffer , MAX_LETTER);
+        char exit[] = "exit\n";
 
 
-		char* name = malloc ( sizeof (char) * MAX_LETTER+1);
-		for (ssize_t i = 0 ; i<r ; i++)
-        	{
-                	name[i] = buffer[i];
-        	}
+        char* name = malloc ( sizeof (char) * MAX_LETTER+1);
+        for (ssize_t i = 0 ; i<r ; i++)
+        {
+            name[i] = buffer[i];
+        }
 
-        	name[r] = 0;
+        name[r] = 0;
 
-		if ( same_name(exit, name))
-                {
-                        printf ("EXIT\n");
-                        break;
-                }
+        if ( same_name(exit, name))
+        {
+            printf ("EXIT\n");
+            break;
+        }
 
-		int index =  name_exist ( data_reseau->name, name);
-		printf ("Hello %i\n", index);
-		char reponse [] ="Salut mec\n";
+        int index =  name_exist ( data_reseau->name, name);
+        printf ("Hello %i\n", index);
+        char reponse [] ="Salut mec\n";
 
-		int cfd  = data_reseau->all_cfd->all_cfd[index];
-		rewrite ( cfd , reponse , strlen(reponse));
-	}
-	
+        int cfd  = data_reseau->all_cfd->all_cfd[index];
+        rewrite ( cfd , reponse , strlen(reponse));
+    }
+
 
 }
 
@@ -119,34 +119,39 @@ void* worker(void* arg)
         if (queue->queue != NULL)
         {
             int cfd = shared_queue_pop ( queue);
-            
-	    char* name = malloc (17 * sizeof(char));
-	    ask_name (cfd, name);
-	    printf ("%s \n", name);
-	    
-	    //push all element in this cfd
-	    push_cfd ( all_cfd, cfd, data_reseau->nb_thread);
-	    push_name (all_name, name);
-	    push_key (all_key, cfd%3, cfd%3);// the key is not good
-	    
-		
+
+            char* name = malloc (17 * sizeof(char));
+            ask_name (cfd, name);
+            struct UserKey* UserKey = malloc (sizeof (struct UserKey));
+            created_Key(UserKey);
+
+
+
+            printf ("name:%s, cfd:%i key public: (%li,%li) \n", name, cfd, UserKey->Public->nb1, UserKey->Public->nb2 );
+
+            //push all element in this cfd
+            push_cfd ( all_cfd, cfd, data_reseau->nb_thread);
+            push_name (all_name, name);
+            push_key (all_key, UserKey->Public->nb1, UserKey->Public->nb2);// the key is not good
+
+
             // send a message
-	    send_mess ( data_reseau, cfd);
-	    
-
-	    // echange the data beetween the differents client
-
-	    //delete all information in this cfd
-	    printf ("delete information\n");
-
-	    int res = -1;
-	    seek_cfd ( all_cfd, cfd, data_reseau->nb_thread, &res);
-	    size_t index = res;
-	    pop_cfd (all_cfd, index);
-	    pop_name ( all_name, index);
-	    pop_key (  all_key, index);
+            send_mess ( data_reseau, cfd);
 
 
+            // echange the data beetween the differents client
+
+            //delete all information in this cfd
+            printf ("delete information\n");
+
+            int res = -1;
+            seek_cfd ( all_cfd, cfd, data_reseau->nb_thread, &res);
+            size_t index = res;
+            pop_cfd (all_cfd, index);
+            pop_name ( all_name, index);
+            pop_key (  all_key, index);
+
+            printf ("delete ok\n");
             close (cfd);
         }
     }
@@ -166,9 +171,9 @@ int main()
     data_reseau->all_key_public = init_data_key ();
     data_reseau->message = NULL;// I suppose delete in the future
     data_reseau->nb_thread= THREAD_COUNT;    
-    
+
     //Create threads
-    
+
     for (size_t i = 0; i<THREAD_COUNT ; i++)
     {
         pthread_t thr;

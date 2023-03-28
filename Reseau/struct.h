@@ -4,18 +4,24 @@
 
 typedef struct Key
 {
-	struct Key* next;
-        size_t nb1;
-        size_t nb2;
-	int empty; // 0 empty /////////// 1 full
+    struct Key* next;
+    size_t nb1;
+    size_t nb2;
+    int empty; // 0 empty /////////// 1 full
 }Key;
+
+typedef struct Public_Private
+{
+    size_t nb1;
+    size_t nb2;
+}Public_Private;
 
 typedef struct UserKey
 {
-	//key Public
-        struct Key* Public;
-	//key private
-        struct Key* Private;
+    //key Public
+    struct Public_Private* Public;
+    //key private
+    struct Public_Private* Private;
 }UserKey;
 
 
@@ -46,60 +52,60 @@ typedef struct shared_queue
 //
 typedef struct name_connect
 {
-	struct name_connect* next;
-	char* name;
+    struct name_connect* next;
+    char* name;
 
 }name_connect;
 
 typedef struct data_name
 {
-	name_connect* list_name;
-	sem_t lock;
+    name_connect* list_name;
+    sem_t lock;
 }data_name;
 
 
 typedef struct data_message
 {
-	size_t size;
-	char* sender;
-	char* recipient;
+    size_t size;
+    char* sender;
+    char* recipient;
 
-	char* message;
+    char* message;
 }data_message;
 
 typedef struct data_cfd
 {
-	int* all_cfd;
-	sem_t lock;
+    int* all_cfd;
+    sem_t lock;
 
 }data_cfd;
 
 
 typedef struct struct_key
 {
-	struct Key* list_key;
-       	sem_t lock;
+    struct Key* list_key;
+    sem_t lock;
 }struct_key;
 
 typedef struct data_reseau
 {
-	//queue all connect
-        shared_queue* sh_queue;
-		
-        //list of name people
-	data_name* name;
+    //queue all connect
+    shared_queue* sh_queue;
 
-	//list of cdf  (accept) 
-	data_cfd* all_cfd;
+    //list of name people
+    data_name* name;
 
-	//list of all key_public to people connect	
-	struct_key* all_key_public ;
+    //list of cdf  (accept) 
+    data_cfd* all_cfd;
 
-	//elemnt to  echange information (here a image ) ( ex a string)
-	
-	data_message* message;
+    //list of all key_public to people connect	
+    struct_key* all_key_public ;
 
-	// nb connection
-	size_t nb_thread;
+    //elemnt to  echange information (here a image ) ( ex a string)
+
+    data_message* message;
+
+    // nb connection
+    size_t nb_thread;
 }data_reseau;
 
