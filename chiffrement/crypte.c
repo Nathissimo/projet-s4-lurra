@@ -17,10 +17,31 @@ void init_key (struct UserKey* UserKey)
     struct Public_Private* Key_Private = malloc (sizeof(struct Public_Private));
     struct Public_Private* Key_Public = malloc ( sizeof(struct Public_Private));
 
-    size_t p = 11;// Ramdom first prime (ex : 3)
-    size_t q = 23;//Random first prime  (ex : 11)
+//    this variable are not random
+//    size_t p = 11;// Ramdom first prime (ex : 3)
+//    size_t q = 23;//Random first prime  (ex : 11)
+	
+    size_t p = get_Random();
+    size_t q = get_Random();
 
 
+    while ( p == q )
+    {
+	    q =get_Random();
+    }
+
+
+    //it's not necessairie
+    if ( p > q)
+    {
+	    size_t tempe = p;
+	    p =q ;
+	    q =tempe;
+    }
+
+    //must delete
+    printf ("(p,q) : (%lu,%lu)\n",p , q);
+	
     size_t n = p *q;
     size_t phi = (p-1) * (q-1);
     size_t e= 2;	

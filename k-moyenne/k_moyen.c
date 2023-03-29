@@ -306,6 +306,8 @@ int k_moyen (int argv, char** argc)
 	}
 	printf ("%i \n", i);
 
+
+
     }
 
     res_surface = RedimensionnerImage(res_surface, basew, baseh);
