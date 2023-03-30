@@ -69,8 +69,10 @@ typedef struct data_message
     size_t size;
     char* sender;
     char* recipient;
+    char** message;
+    sem_t lock;
+    struct data_message* next;
 
-    char* message;
 }data_message;
 
 typedef struct data_cfd
@@ -107,5 +109,6 @@ typedef struct data_reseau
 
     // nb connection
     size_t nb_thread;
+
 }data_reseau;
 

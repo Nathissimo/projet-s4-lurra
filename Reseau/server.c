@@ -16,6 +16,7 @@
 #include "list_name.h"
 #include "list_key.h"
 
+#define SIZE_MESSAGE 4096
 
 // Number of threads.
 const size_t THREAD_COUNT = 4;
@@ -93,11 +94,20 @@ void send_mess ( data_reseau* data_reseau, int cfd )
         }
 
         int index =  name_exist ( data_reseau->name, name);
-        printf ("Hello %i\n", index);
-        char reponse [] ="Salut mec\n";
+        int cfd_receive  = data_reseau->all_cfd->all_cfd[index];
+        
+        printf ("connection : %i\n", index);
 
-        int cfd  = data_reseau->all_cfd->all_cfd[index];
-        rewrite ( cfd , reponse , strlen(reponse));
+        if ( index == -1 )
+            continue;
+
+        
+        char reponse [SIZE_MESSAGE] ;//initialization of size (maybe)
+
+
+        r  =read ( cfd, reponse, SIZE_MESSAGE);
+        printf ("OK \n");
+        rewrite ( cfd_receive , reponse , strlen(reponse));
     }
 
 
@@ -212,7 +222,7 @@ int main()
         if (err == -1)
             errx (EXIT_FAILURE, "error setsockopt");
 
-        // Try to bind the socket	
+        // Try to bind the socket
         err = bind(sfd, p->ai_addr, p->ai_addrlen);
 
         if (err == 0)
@@ -245,8 +255,8 @@ int main()
         if ( cfd == -1)
             errx (EXIT_FAILURE, "error for accept sfd");
 
-        shared_queue_push (data_reseau->sh_queue, cfd);
         printf ( "Connection successful!\n");
+        shared_queue_push (data_reseau->sh_queue, cfd);
 
 
         //close (cfd);
