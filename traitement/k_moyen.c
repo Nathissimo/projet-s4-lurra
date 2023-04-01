@@ -139,7 +139,6 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	}
 
     }
-
     // verifie si tt les pixels sont pris en compte
     // on doit le supprimer
 
@@ -171,7 +170,6 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 	temp_color.r = moyen[i*3] / nb_pixels[i];
 	temp_color.g = moyen[i*3+1] / nb_pixels[i];
 	temp_color.b = moyen[i*3+2] / nb_pixels[i];
-
 	all_color[i] = temp_color;
 
     }
@@ -195,7 +193,7 @@ int k_moyen (int argv, char** argc)
 
     int baseh = surface->h;
     int basew = surface->w;
-    surface = RedimensionnerImage(surface, 0.50*basew, 0.50*baseh);
+    surface = RedimensionnerImage(surface, 0.35*basew, 0.35*baseh);
 
     int k = strtoul (argc[2], NULL, 10);	
 
@@ -307,6 +305,8 @@ int k_moyen (int argv, char** argc)
 	    res_pixels [j] = SDL_MapRGB ( res_surface->format, best_color.r, best_color.g, best_color.b );
 	}
 	printf ("%i \n", i);
+
+
 
     }
 
