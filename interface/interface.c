@@ -1,5 +1,13 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <err.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <math.h>
+#include <sys/random.h>
+#include <time.h>
+#include "../traitement/k_moyen.h"
 
 
 //interface
@@ -37,7 +45,7 @@ void on_fchose_image(GtkButton *button, gpointer user_data)
     		char *filename;
     		GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
     		filename = gtk_file_chooser_get_filename (chooser);
-		printf("Traitement\n");
+		k_moyen(4,filename,5,10);
 		GdkPixbuf *pix = gdk_pixbuf_new_from_file(filename,NULL);
 		if(pix!=NULL)
 		{
@@ -57,7 +65,7 @@ void on_fbin(GtkButton *button, gpointer user_data)
 {
 	Inter* inter =user_data;
 	GdkPixbuf *pix = gdk_pixbuf_new_from_file(
-			"temp_files/binarization.png",NULL);
+			"new_surface.bmp",NULL);
 	gtk_image_set_from_pixbuf(inter->Gimage,pix);
 	if(button!=NULL)
 	{
@@ -75,7 +83,7 @@ int main ()
      // (Exits if an error occurs.)                                              
      GtkBuilder* builder = gtk_builder_new();                                    
      GError* error = NULL;                                                       
-     if (gtk_builder_add_from_file(builder, "solve.glade", &error) == 0)         
+     if (gtk_builder_add_from_file(builder, "interface/solve.glade", &error) == 0)         
      {                                                                           
          g_printerr("Error loading file: %s\n", error->message);                 
          g_clear_error(&error);                                                  

@@ -322,3 +322,10 @@ int k_moyen (int argv, char* image, int k, int nb_iteration)
 
     return 1;
 }
+
+
+int main(int argc, char** argv)
+{
+	k_moyen(argc, argv[1], strtoul(argv[2],NULL,10), strtoul(argv[3],NULL,10));
+	return 1;
+}
