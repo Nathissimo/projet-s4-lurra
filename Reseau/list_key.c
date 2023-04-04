@@ -40,7 +40,6 @@ void push_key (struct_key* struct_key, size_t nb1 , size_t nb2 )
 	{
 		struct_key->list_key->next = new_key;
 		sem_post( &struct_key->lock);
-		printf ("good\n");
 		return;
 	}
 

@@ -19,16 +19,16 @@ size_t get_Random ()
 	
 	if ( prime <0 )
 		prime = prime * -1;
-	size_t res = prime % 1000;
+	size_t res = prime % 500;
 	
-	srandom (time ( NULL));
+	srand (time ( NULL));
 	while ( is_prime_number(res) == FALSE )
 	{
 		if (getrandom (&prime, sizeof (int), GRND_NONBLOCK) == -1)
 			perror ("getramdom");
 		if (prime <0)
 			prime = prime * -1;
-		res = prime % 1000;
+		res = prime % 500;
 	}
 	return res;
 }

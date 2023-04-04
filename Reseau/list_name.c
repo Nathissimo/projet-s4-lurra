@@ -50,6 +50,7 @@ void push_name (data_name* data_name, char* name )
 
     if (name_connect->name == NULL)
     {
+
         name_connect->name = name;
         free ( new_name);
         sem_post (&data_name->lock);
@@ -58,7 +59,10 @@ void push_name (data_name* data_name, char* name )
 
     for ( ;name_connect->next != NULL; name_connect = name_connect->next)
     {
-        if ( name_connect->name == NULL)
+        
+
+        printf ("one element\n");
+	if ( name_connect->name == NULL)
         {
             name_connect->name = name;
             free ( new_name);

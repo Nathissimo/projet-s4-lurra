@@ -63,17 +63,23 @@ typedef struct data_name
     sem_t lock;
 }data_name;
 
-
 typedef struct data_message
 {
     size_t size;
     char* sender;
-    char* recipient;
+    char* receiver;
     char** message;
-    sem_t lock;
     struct data_message* next;
 
 }data_message;
+
+typedef struct struct_message
+{
+        data_message* list_message;
+        sem_t lock;
+
+}struct_message;
+
 
 typedef struct data_cfd
 {
@@ -105,7 +111,7 @@ typedef struct data_reseau
 
     //elemnt to  echange information (here a image ) ( ex a string)
 
-    data_message* message;
+    struct_message* all_message;
 
     // nb connection
     size_t nb_thread;
