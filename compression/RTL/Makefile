@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -L -lgmp -Wall -Wextra
 
 all: cmpr
 

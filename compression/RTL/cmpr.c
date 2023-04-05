@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <string.h>
+#include <gmp.h>
 //#include <png.h>
 
 #include "cmpr.h"
