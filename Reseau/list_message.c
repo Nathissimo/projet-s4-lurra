@@ -55,6 +55,7 @@ struct_message* init_data_message ()
 
 void push_message (struct_message* struct_message, char* message, size_t size, char* sender, char* receiver)
 {
+
     sem_wait (&struct_message->lock);
 
 	//initialisation of new data_message
@@ -67,7 +68,6 @@ void push_message (struct_message* struct_message, char* message, size_t size, c
     //join a new element in chain list
 
     struct data_message* data_message = struct_message->list_message;
-
     new_data_message->next = data_message->next;
     data_message->next = new_data_message;
 
@@ -86,13 +86,13 @@ char* check_and_return_message ( struct_message* struct_message, char* receiver,
 	struct data_message* data_message = struct_message->list_message->next;
 	
 	struct data_message* temp_data_message = struct_message->list_message;
-	
 
 	if ( data_message == NULL)	//no message
 	{	
 		sem_post (&struct_message->lock);
 		return NULL;
 	}
+
 
 	for ( ; data_message ->next != NULL; data_message = data_message->next )
 	{
@@ -118,9 +118,6 @@ char* check_and_return_message ( struct_message* struct_message, char* receiver,
 		char** mes = data_message->message;
 		*size = data_message->size;
 		//free
-		free ( *(data_message->message));
-		free ( data_message->sender);
-		free ( data_message->receiver);
 
 		// delete struct data_message
 		temp_data_message->next	= data_message->next;

@@ -72,7 +72,7 @@ int read_name_init (data_reseau* data_reseau, int cfd)
 
 
 
-void send_mess ( data_reseau* data_reseau, int cfd)
+void send_mess ( data_reseau* data_reseau, int cfd, char* name)
 {
 
 
@@ -110,7 +110,10 @@ void send_mess ( data_reseau* data_reseau, int cfd)
 			if ( r == -1 )
 				errx (EXIT_FAILURE, "read() error");
 
+			char* name_receiver = return_name ( data_reseau->name, (size_t)index);
+
 			printf ("OK \n");
+			push_message ( data_reseau->all_message, reponse, r, name,  name_receiver);
 			rewrite ( cfd_receive , reponse , strlen(reponse));
 		}
 		if ( index == -1)
@@ -121,18 +124,20 @@ void send_mess ( data_reseau* data_reseau, int cfd)
 
 		
 		// check if you have a message
-		/*
+		
 		size_t len_mes;
-		char* rep = malloc (sizeof ( char)* SIZE_MESSAGE);
-		rep = check_and_return_message ( data_reseau->all_message, name, &len_mes);
+		//char* rep = malloc (sizeof ( char)* SIZE_MESSAGE);
+		char* rep = check_and_return_message ( data_reseau->all_message, name, &len_mes);
 		if ( rep == NULL)
 		{
 			printf ("no message\n");
-			free (rep);
 			continue;
 		}
-		free (rep);
-		*/
+		else
+		{
+			printf ( "%s : tu as un message\n", name);
+		}
+		
 
 	}
 
@@ -172,7 +177,7 @@ void* worker(void* arg)
 
 
 			// send a message
-			send_mess ( data_reseau, cfd);
+			send_mess ( data_reseau, cfd, name);
 
 
 			// echange the data beetween the differents client
@@ -202,15 +207,13 @@ int main()
 
 	//initialization
 	data_reseau->sh_queue = shared_queue_new();
+	data_reseau->all_message = init_data_message();
 	data_reseau->name = init_data_name ();
 	data_reseau->all_cfd = init_list_cfd ( THREAD_COUNT);
 	data_reseau->all_key_public = init_data_key ();
 	data_reseau->nb_thread= THREAD_COUNT;    
-	data_reseau->all_message = NULL;
-	
 	
 	//Create threads
-
 	for (size_t i = 0; i<THREAD_COUNT ; i++)
 	{
 		pthread_t thr;

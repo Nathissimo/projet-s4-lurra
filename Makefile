@@ -10,7 +10,7 @@ interfaceobj =  traitement/k_moyen.o interfacePres/interface.o
 
 traitementobj = k-moyenne/k_moyen.o
 
-crypteobj = chiffrement/basics.o chiffrement/crypte.o
+crypteobj = chiffrement/basics.o chiffrement/crypte.o chiffrement/main.o
 
 OBJ = $(traitementobj) $(crypteobj) $(interfaceobj)
 

@@ -102,6 +102,23 @@ void pop_name ( data_name* data_name , size_t index )
     sem_post (&data_name->lock);
 }
 
+char* return_name (data_name* data_name, size_t index)
+{
+	sem_wait ( &data_name->lock);
+	name_connect* name_connect = data_name->list_name->next;
+	for ( size_t i = 0; i<index; i++)
+	{
+		name_connect = name_connect->next;
+		if ( name_connect == NULL)
+			errx (EXIT_FAILURE, "error index is to big in struct data_name in fct return_name");
+
+	}
+	sem_post (&data_name->lock);
+	return name_connect->name;
+
+}
+
+
 void rewrite_name (int fd, const void *buf, size_t count)
 {
     size_t print =0;
