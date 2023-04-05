@@ -1,36 +1,32 @@
 # Makefile
 
 CC = gcc 
-CFLAGS = -Wall -Wextra -O3 # `pkg-config --cflags sdl2 SDL2_image SDL2_ttf gtk+-3.0`
-CPPFLAGS =
+CFLAGS = -Wall -Wextra -O3 -g # `pkg-config --cflags sdl2 SDL2_image SDL2_ttf gtk+-3.0`
+CPPFLAGS =  # `pkg-config --cflags sdl2 SDL2_image SDL2_t    tf gtk+-3.0`
 LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
-LDFLAGS=
+LDFLAGS = -fsanitize=address
 
-traitementobj = traitement/blur.o traitement/binarization.o traitement/dilatation_and_erosion.o traitement/grayscale.o traitement/sobel.o traitement/rescale.o traitement/fill.o traitement/contrast.o traitement/main.o
+interfaceobj =  traitement/k_moyen.o interface/interface.o
+
+traitementobj = k-moyenne/k_moyen.o
 
 crypteobj = chiffrement/basics.o chiffrement/crypte.o
 
-OBJ = $(traitementobj) $(crypteobj)
+OBJ = $(traitementobj) $(crypteobj) $(interfaceobj)
 
 
-EXE = main_traitement crypte
+EXE = k-moyen crypte main
 
-FOLDER = rmdir -rf temp_files/
+all: traitement interface crypte
 
-all: traitement crypte
+traitement: CPPFLAGS += `pkg-config --cflags sdl2 SDL2_image` -MMD
+traitement: LDLIBS += `pkg-config --libs sdl2 SDL2_image` -lSDL_image -lm
+traitement: $(traitementobj)
+	$(CC) $(LDFLAGS) $(traitementobj) $(LDLIBS) -o k-moyen
+k-moyenne/k_moyen.o : k-moyenne/k_moyen.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o k-moyenne/k_moyen.o k-moyenne/k_moyen.c
 
-temp_files/info.txt:
-	mkdir temp_files
-	touch temp_files/info.txt
-tempfiles: temp_files/info.txt
-	touch temp_files/info.txt
 
-traitement: CFLAGS += `pkg-config --cflags sdl2 SDL2_image`
-traitement: LDLIBS += -lm `pkg-config --libs sdl2 SDL2_image`
-traitement: $(traitementobj) tempfiles
-	$(CC) $(traitementobj) $(LDLIBS) -o main_traitement
-traitement/main.o: traitement/main.c
-	$(CC) $(CFLAGS) -c -o traitement/main.o traitement/main.c
 
 crypte: LDFLAGS += -Wall -Wextra -lm
 crypte: LDLIBS += -lm
@@ -38,9 +34,18 @@ crypte:  $(crypteobj)
 	$(CC) $(crypteobj) $(LDLIBS) -o crypte
 
 
+interface: CPPFLAGS += `pkg-config --cflags sdl2 SDL2_image gtk+-3.0` -MMD
+interface: LDLIBS += `pkg-config --libs sdl2 SDL2_image gtk+-3.0` -lSDL_image -lm
+interface: $(interfaceobj)
+	$(CC) $(interfaceobj) $(LDLIBS) -o main
+interface/interface.o: interface/interface.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o interface/interface.o interface/interface.c
+
 clean:
 	$(RM) $(FOLDER)
 	$(RM) $(OBJ)
 	$(RM) $(EXE)
+	$(RM) *.bmp
+	
 	
 #END

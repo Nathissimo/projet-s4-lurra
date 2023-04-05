@@ -1,11 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <sys/random.h>
+#include <time.h>
 
 #include "basics.h"
 
 size_t const TRUE = 1;
 size_t const FALSE =0;
+
+
+
+size_t get_Random ()
+{
+	int prime;
+	if (getrandom (&prime, sizeof (int), GRND_NONBLOCK) == -1)
+                    perror ("getramdom");
+	
+	if ( prime <0 )
+		prime = prime * -1;
+	size_t res = prime % 500;
+	
+	srand (time ( NULL));
+	while ( is_prime_number(res) == FALSE )
+	{
+		if (getrandom (&prime, sizeof (int), GRND_NONBLOCK) == -1)
+			perror ("getramdom");
+		if (prime <0)
+			prime = prime * -1;
+		res = prime % 500;
+	}
+	return res;
+}
+
+
+
+
 
 size_t is_prime_number ( size_t nb)
 {

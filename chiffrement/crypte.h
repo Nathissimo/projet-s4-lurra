@@ -1,13 +1,10 @@
 #pragma once 
 
-/*
-struct Key
-{
-	size_t nb1;
-	size_t nb2;
-};
-*/
+#include "basics.h"
+#include "../Reseau/struct.h"
 
-void init_key (struct Key* Key_Public, struct Key* Key_Private);
+void init_key (struct UserKey* UserKey);
 unsigned long* encryption (char* message , struct UserKey* userkey);
 char* decrypte ( unsigned long* message, struct UserKey* userkey, char* old );
+int fct_main (char * path);
+void created_Key (UserKey* UserKey);
