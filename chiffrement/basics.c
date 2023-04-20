@@ -39,9 +39,13 @@ size_t get_Random ()
 
 size_t is_prime_number ( size_t nb)
 {
+	if ( nb <2 )
+		return FALSE;
+
 	double square = sqrt((double)nb);
 	if ( nb % 2 == 0)
 		return FALSE;
+
 	for ( int i = 3; (double) i<=square ; i+=2)
 	{
 		if ( nb % i == 0)

@@ -140,6 +140,7 @@ void ask_name (  int cfd , char* name)
     char quest[]= "What your name?\n";
     rewrite_name( cfd, quest , strlen( quest));
 
+all_data
     ssize_t  r =read (cfd, res , 16 ); // max xname 16 caractere
 
     for (ssize_t i = 0 ; i<r ; i++)
@@ -205,6 +206,6 @@ int name_exist ( data_name* data_name, char* name )
 
     printf ("This name not connect in this server\n");
 
-    return -1;	
+return -1;	
 
 }

@@ -22,6 +22,22 @@ struct_key* init_data_key ( void)
 	return struct_key;
 }
 
+
+UserKey* receive_key_public ( )
+{
+	UserKey* UserKey = malloc (sizeof (UserKey));
+
+	struct Public_Private* Key_Private = malloc (sizeof(struct Public_Private));
+    	struct Public_Private* Key_Public = malloc ( sizeof(struct Public_Private));
+
+	UserKey->Public = Key_Public;
+    	UserKey->Private = Key_Private;
+
+	return UserKey;
+
+}
+
+
 void push_key (struct_key* struct_key, size_t nb1 , size_t nb2 )
 {
 	sem_wait(&struct_key->lock);
@@ -103,4 +119,22 @@ void pop_key ( struct_key* struct_key , size_t index)
 }
 
 
+void return_key_public ( struct_key* struct_key, size_t index, UserKey* UserKey)
+{
+	sem_wait ( &struct_key->lock);
 
+	Key * key = struct_key->list_key->next;
+	for ( size_t i =0 ; i<index ; i++)
+	{
+		key = key->next;
+
+		if ( key == NULL)
+			errx (EXIT_FAILURE, "ERROR index in Key struc");
+	}
+	
+	UserKey->Public->nb1 = key->nb1;
+	UserKey->Public->nb2 = key->nb2;
+
+	sem_post ( &struct_key->lock);
+}
+	

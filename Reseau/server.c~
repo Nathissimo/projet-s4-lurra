@@ -11,13 +11,12 @@
 
 #include "shared_queue.h"
 #include "../chiffrement/crypte.h"
+#include "list_cfd.h"
 #include "struct.h"
-//#include "list_cfd.h"
-//#include "list_name.h"
-//#include "list_key.h"
-//#include "list_message.h"
-#include "list_all_data.h"
-#include "basics.h"
+#include "list_cfd.h"
+#include "list_name.h"
+#include "list_key.h"
+#include "list_message.h"
 
 #define SIZE_MESSAGE 4096
 
@@ -44,11 +43,8 @@ void rewrite(int fd, const void *buf, size_t count)
 }
 
 
-// retun a int
-// 0 the name exist
-// -1 name don't exist
-// -2 client quit the server
-int read_name_init (all_data* all_data, char** receiver, int cfd)
+
+int read_name_init (data_reseau* data_reseau, int cfd)
 {
 	char buffer[MAX_LETTER+1];
 	memset (buffer, 0, MAX_LETTER);
@@ -68,22 +64,15 @@ int read_name_init (all_data* all_data, char** receiver, int cfd)
 		printf ("EXIT\n");
 		return -2;
 	}
-	data_client* client =  search_client ( all_data, name);
-	int index;	
-	//this client don't exist
-	if (client == NULL)
-		index = -1;
-	else
-		index = 0;
-
-	*receiver = name;
+	int index =  name_exist ( data_reseau->name, name);
+	free ( name);
 	return index;
 }
 
 
 
 
-void send_mess ( data_reseau* data_reseau, int cfd, char* name, UserKey* key_private_public)
+void send_mess ( data_reseau* data_reseau, int cfd, char* name)
 {
 
 
@@ -93,15 +82,16 @@ void send_mess ( data_reseau* data_reseau, int cfd, char* name, UserKey* key_pri
 	{
 		char info[] = "Write the name of the person you want to send a message to :\n";
 		rewrite (cfd, info, strlen (info));
+	
 
-		char* name_receiver;
-		int index = read_name_init ( data_reseau->all_data, &name_receiver, cfd);
+		int index = read_name_init ( data_reseau, cfd);
+		int cfd_receive  = data_reseau->all_cfd->all_cfd[index];
 
 
 		if ( index == -2)
 			break;
 
-		else if ( index == 0  )
+		if ( index != -1  )
 		{
 
 
@@ -121,74 +111,43 @@ void send_mess ( data_reseau* data_reseau, int cfd, char* name, UserKey* key_pri
 			if ( r == -1 )
 				errx (EXIT_FAILURE, "read() error");
 
+			char* name_receiver = return_name ( data_reseau->name, (size_t)index);
 
 			printf ("OK \n");
 			// crypte message
-
-			data_client* data_client = search_client (data_reseau->all_data, name_receiver);
-
-			UserKey* UserKey_receiver = receive_key_public ( );
-			UserKey_receiver->Public = data_client->key;
-			unsigned long* message_crypte = encryption( reponse, UserKey_receiver); //message crypte
-
-			push_message ( data_reseau->all_data,data_client->name ,message_crypte, strlen (reponse), name); //size is maybe not good	
 			
+			UserKey* UserKey_receiver = receive_key_public ();
+			return_key_public( data_reseau->all_key_public  ,index, UserKey_receiver);
+
+			unsigned long* message_crypte = encryption( reponse, UserKey_receiver); //message crypte
+			
+			push_message ( data_reseau->all_message, message_crypte, r, name,  name_receiver);
+
 			//simple write delete in future
-			//rewrite ( data_client->cfd , reponse , strlen(reponse));
+			rewrite ( cfd_receive , reponse , strlen(reponse));
 		}
-		else if ( index == -1)
+		if ( index == -1)
 		{
 			char name_dont_existe[] = "This people is not connected to this server\n";
 			rewrite ( cfd , name_dont_existe, strlen( name_dont_existe));
 		}
 
-
+		
 		// check if you have a message
-
+		
+		size_t len_mes;
 		//char* rep = malloc (sizeof ( char)* SIZE_MESSAGE);
-		data_message* rep = check_my_message (data_reseau->all_data, name);
-
-		//first iteration
-		if ( rep != NULL)
+		unsigned long* rep = check_and_return_message ( data_reseau->all_message, name, &len_mes);
+		if ( rep == NULL)
 		{
-			char* mess_decrypte = decrypte (rep->message, key_private_public, rep->size);
-
-			//print the message
-			char* info1 ="Message send from ";
-			//print sentence
-			rewrite ( cfd ,info1, strlen(info1));
-			//print name of sender
-			rewrite ( cfd , rep->sender, strlen ( rep->sender));
-			//print message
-			rewrite ( cfd , mess_decrypte , rep->size);
-
-			//free struct message
-
+			printf ("no message\n");
+			continue;
 		}
-		//while ( rep != NULL)
-		while ( rep != NULL)
+		else
 		{
-
-			rep = check_my_message (data_reseau->all_data, name);
-			if ( rep != NULL)
-			{
-				char* mess_decrypte = decrypte (rep->message, key_private_public, rep->size);
-
-				//print the message
-				char* info1 ="Message send from ";
-				//print sentence
-				rewrite ( cfd ,info1, strlen(info1));
-				//print name of sender
-				rewrite ( cfd , rep->sender, strlen ( rep->sender));
-				//print message
-				rewrite ( cfd , mess_decrypte , rep->size);
-
-				//free struct message
-
-			}
-
+		//	printf ( "%s : tu as un message\n", name);
 		}
-
+		
 
 	}
 
@@ -202,7 +161,9 @@ void* worker(void* arg)
 	// Gets the shared queue.
 	data_reseau* data_reseau = arg;
 	shared_queue* queue = data_reseau->sh_queue;
-	all_data* data = data_reseau->all_data;
+	data_name* all_name = data_reseau->name;
+	data_cfd* all_cfd = data_reseau->all_cfd;
+	struct_key* all_key = data_reseau->all_key_public;
 
 	while (1)
 	{
@@ -219,19 +180,28 @@ void* worker(void* arg)
 
 			printf ("name:%s cfd:%i key public: (%li,%li) \n", name, cfd, UserKey->Public->nb1, UserKey->Public->nb2 );
 
-			//push all data to the client
-			push_client ( data , name , cfd , UserKey->Public);
+			//push all element in this cfd
+			push_cfd ( all_cfd, cfd, data_reseau->nb_thread);
+			push_name (all_name, name);
+			push_key (all_key, UserKey->Public->nb1, UserKey->Public->nb2);// the key is not good
 
 
 			// send a message
-			send_mess ( data_reseau, cfd, name, UserKey);
+			send_mess ( data_reseau, cfd, name);
 
 
+			// echange the data beetween the differents client
 
 			//delete all information in this cfd
 			printf ("delete information\n");
 
-			pop_client (data, cfd );
+			int res = -1;
+			seek_cfd ( all_cfd, cfd, data_reseau->nb_thread, &res);
+			size_t index = res;
+			pop_cfd (all_cfd, index);
+			pop_name ( all_name, index);
+			pop_key (  all_key, index);
+
 			printf ("delete ok\n");
 			close (cfd);
 		}
@@ -243,13 +213,15 @@ int main()
 {
 	//Creates the data for thread
 
-	struct data_reseau* data_reseau = malloc ( sizeof (struct data_reseau));
+	struct data_reseau* data_reseau = malloc ( sizeof (data_reseau));
 
 	//initialization
 	data_reseau->sh_queue = shared_queue_new();
-	data_reseau->all_data = init_data_client ();
-	data_reseau->nb_thread = THREAD_COUNT;
-
+	data_reseau->name = init_data_name ();
+	data_reseau->all_cfd = init_list_cfd ( THREAD_COUNT);
+	data_reseau->all_key_public = init_data_key ();
+	data_reseau->all_message = init_data_message();
+	
 	//Create threads
 	for (size_t i = 0; i<THREAD_COUNT ; i++)
 	{

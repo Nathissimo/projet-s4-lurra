@@ -91,9 +91,8 @@ unsigned long* encryption (char* message , struct UserKey* userkey)
 }
 
 
-char* decrypte ( unsigned long* message, struct UserKey* userkey, char* old )
+char* decrypte ( unsigned long* message, struct UserKey* userkey, size_t len )
 {
-    size_t len = strlen (old);
 
     char* encrypte = malloc ( sizeof ( char) * (len +1));
     for ( size_t i = 0 ; *(message +i) != 0 ; i++)
@@ -125,7 +124,7 @@ int fct_main (char * path)
 
     char* mes =path;
     unsigned long* res = encryption ( mes , &UserKey);
-    char* res2 = decrypte ( res, &UserKey, mes);
+    char* res2 = decrypte ( res, &UserKey, strlen(mes));
 
     printf ( "Key Public : (%lu , %lu)\n", UserKey.Public->nb1, UserKey.Public->nb2);
     printf ( "Key Private : (%lu , %lu)\n", UserKey.Private->nb1, UserKey.Private->nb2);

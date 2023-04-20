@@ -2,13 +2,6 @@
 
 #include <semaphore.h>
 
-typedef struct Key
-{
-    struct Key* next;
-    size_t nb1;
-    size_t nb2;
-    int empty; // 0 empty /////////// 1 full
-}Key;
 
 typedef struct Public_Private
 {
@@ -48,73 +41,43 @@ typedef struct shared_queue
 } shared_queue;
 
 
-// struct for all name
-//
-typedef struct name_connect
-{
-    struct name_connect* next;
-    char* name;
-
-}name_connect;
-
-typedef struct data_name
-{
-    name_connect* list_name;
-    sem_t lock;
-}data_name;
-
+//data message
 typedef struct data_message
 {
     size_t size;
+    unsigned long* message;
     char* sender;
-    char* receiver;
-    char** message;
     struct data_message* next;
 
 }data_message;
 
-typedef struct struct_message
+
+//data all client connect with all message who have receive
+typedef struct data_client
 {
-        data_message* list_message;
-        sem_t lock;
+	struct data_client* next;
+	char* name;
+	int cfd;
+	Public_Private* key;
+	data_message *message;
+	
+}data_client;
 
-}struct_message;
-
-
-typedef struct data_cfd
+typedef struct all_data
 {
-    int* all_cfd;
-    sem_t lock;
+	data_client* list_data_client;
+	sem_t lock;
+}all_data;
 
-}data_cfd;
-
-
-typedef struct struct_key
-{
-    struct Key* list_key;
-    sem_t lock;
-}struct_key;
 
 typedef struct data_reseau
 {
     //queue all connect
     shared_queue* sh_queue;
+	
+    // all data,: name, key and cfd (socket)
+    all_data * all_data;
 
-    //list of name people
-    data_name* name;
-
-    //list of cdf  (accept) 
-    data_cfd* all_cfd;
-
-    //list of all key_public to people connect	
-    struct_key* all_key_public ;
-
-    //elemnt to  echange information (here a image ) ( ex a string)
-
-    struct_message* all_message;
-
-    // nb connection
     size_t nb_thread;
-
 }data_reseau;
 
