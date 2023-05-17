@@ -14,7 +14,7 @@ SDL_Color Choose_Color (SDL_Surface* surface, SDL_Color* all_color, int i, int k
 
 void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Surface* new_surface, int k);
 
-int k_moyen (int argv, char* image, int k, int nb_iteration);
+int k_moyen (char* image, int k, int nb_iteration);
 
 
 

@@ -32,10 +32,11 @@
   <object class="GtkWindow" id="org.gtk.inter">
     <property name="name">Lurra</property>
     <property name="width-request">1400</property>
-    <property name="height-request">1000</property>
+    <property name="height-request">919</property>
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Lurra</property>
+    <property name="resizable">False</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -125,7 +126,7 @@ tout ceci de manière simple et efficace.
 Il vous suffit de cliquer sur les bouton pour y décrouvrir les fonctionnalités.</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans 10"/>
-                  <attribute name="size" value="21504"/>
+                  <attribute name="size" value="18432"/>
                 </attributes>
               </object>
               <packing>
@@ -159,7 +160,7 @@ Il vous suffit de cliquer sur les bouton pour y décrouvrir les fonctionnalités
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScale" id="ChoixCouleu">
+                  <object class="GtkScale" id="ChoixCouleur">
                     <property name="height-request">60</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -203,7 +204,7 @@ Il vous suffit de cliquer sur les bouton pour y décrouvrir les fonctionnalités
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="ImageSImplifie">
+                  <object class="GtkButton" id="ImageSimplifie">
                     <property name="label" translatable="yes">Image simplifié</property>
                     <property name="height-request">50</property>
                     <property name="visible">True</property>
@@ -257,7 +258,7 @@ sur la simplification</property>
               <object class="GtkButton" id="Telechargement">
                 <property name="label" translatable="yes">Téléchargement</property>
                 <property name="width-request">100</property>
-                <property name="height-request">80</property>
+                <property name="height-request">50</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -266,8 +267,8 @@ sur la simplification</property>
                 <property name="always-show-image">True</property>
               </object>
               <packing>
-                <property name="x">777</property>
-                <property name="y">755</property>
+                <property name="x">776</property>
+                <property name="y">772</property>
               </packing>
             </child>
             <child>
@@ -280,8 +281,8 @@ sur la simplification</property>
                 <property name="receives-default">True</property>
               </object>
               <packing>
-                <property name="x">1366</property>
-                <property name="y">900</property>
+                <property name="x">1240</property>
+                <property name="y">800</property>
               </packing>
             </child>
           </object>

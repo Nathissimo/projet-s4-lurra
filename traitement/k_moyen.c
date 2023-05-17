@@ -181,16 +181,16 @@ void create_k_color (SDL_Color* all_color, SDL_Surface* original_surface, SDL_Su
 
 
 
-int k_moyen (int argv, char* image, int k, int nb_iteration)
+int k_moyen (char* image, int k, int nb_iteration)
 {
-    if  (argv != 4)
-	errx (1, "Must be 3 argv: first: image, color number and number of iteration !\n");
 
     SDL_Surface* surface = load_image( image);
 
-    int baseh = surface->h;
-    int basew = surface->w;
-    surface = RedimensionnerImage(surface, 0.35*basew, 0.35*baseh);
+    int baseh = 1000;
+    int basew = 800;
+    surface = RedimensionnerImage(surface, baseh, basew);
+
+    SDL_SaveBMP(surface , "old_surface.bmp");
 
     int* pix = malloc ( sizeof(int) * k); 
 
@@ -300,17 +300,12 @@ int k_moyen (int argv, char* image, int k, int nb_iteration)
 	    res_pixels [j] = SDL_MapRGB ( res_surface->format, best_color.r, best_color.g, best_color.b );
 	}
 	printf ("%i \n", i);
-
-
-
     }
 
-    res_surface = RedimensionnerImage(res_surface, basew, baseh);
+    res_surface = RedimensionnerImage(res_surface, baseh, basew);
 
     SDL_SaveBMP(res_surface , "new_surface.bmp");
-    SDL_SaveBMP(surface , "old_surface.bmp");
 
-    printf ("K-moyen just finished !\n");
     //Free all element
 
 
@@ -319,6 +314,8 @@ int k_moyen (int argv, char* image, int k, int nb_iteration)
     SDL_FreeSurface (res_surface);
     SDL_FreeSurface (surface);
     SDL_Quit();
+
+    printf ("K-moyen just finished !\n");
 
     return 1;
 }
