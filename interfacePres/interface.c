@@ -19,6 +19,7 @@ typedef struct Inter
     GtkImage* Gimage;
     int usless; //this is usless
 } Inter;
+
 //for the chose buttom
 void on_fchose_image(GtkButton *button, gpointer user_data)
 {
@@ -83,7 +84,7 @@ int main ()
      // (Exits if an error occurs.)                                              
      GtkBuilder* builder = gtk_builder_new();                                    
      GError* error = NULL;                                                       
-     if (gtk_builder_add_from_file(builder, "interfacePres/solve.glade", &error) == 0)         
+     if (gtk_builder_add_from_file(builder, "interfacePres/interface.glade", &error) == 0)         
      {                                                                           
          g_printerr("Error loading file: %s\n", error->message);                 
          g_clear_error(&error);                                                  
@@ -93,26 +94,73 @@ int main ()
      // Gets the widgets.                                                        
      GtkWindow* window = 
 	     GTK_WINDOW(gtk_builder_get_object(builder, "org.gtk.inter"));
-     GtkButton* Bchose_image = 
-	     GTK_BUTTON(gtk_builder_get_object(builder, "Bchose_image"));
+	     
+	 //Main
+	     
+	 GtkButton* BPresentation = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "BPresentation"));
+	     
+     GtkButton* BSimplification = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "BSimplification"));
+	     
+	 GtkButton* BMessagerie = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "BMessagerie"));
+	 	 
+	 GtkButton* BQuit = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "Quit"));
+	     
+	 //Présentation
+	     
+	 GtkLabel* TPresentation = 
+	     GTK_LABEL(gtk_builder_get_object(builder, "PresentationTexte"));
+	     
+	 //Simplification
+	     
+	 GtkButton* BChoixImage = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "ChoixImage"));
+	     
+	 GtkLabel* TChoixCouleur = 
+	     GTK_LABEL(gtk_builder_get_object(builder, "ChoixCouleurTexte"));
+	     
+	 
+	 GtkScale* BChoixCouleur = 
+	     GTK_SCALE(gtk_builder_get_object(builder, "ChoixCouleur"));
+	     
+	 GtkButton* BStartSimplification = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "StartSimplification"));
+	     
+	 GtkButton* BImageSimplification = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "ImageSimplifie"));
      
-    
-     GtkButton* Bbin = GTK_BUTTON(gtk_builder_get_object(builder, "Bbin"));
-     
-     GtkImage* Gimage = GTK_IMAGE(gtk_builder_get_object(builder, "image"));
+     GtkButton* BImageBase = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "ImageBase"));
+	     
+	 GtkButton* BTelechargement = 
+	     GTK_BUTTON(gtk_builder_get_object(builder, "Telechargement"));
+
+     GtkImage* GImage = GTK_IMAGE(gtk_builder_get_object(builder, "Image"));
      
      Inter inter=
      {
-	     .Bbin=Bbin,
-	     .Gimage=Gimage,
+	     //.Bbin=Bbin,
+	     .Gimage=GImage,
 	     .usless=1
      };
 
      g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), &inter);
-     g_signal_connect(Bchose_image, "clicked", 
+     g_signal_connect(BChoixImage, "clicked", 
 		     G_CALLBACK(on_fchose_image), &inter);
-     g_signal_connect(Bbin, "clicked", G_CALLBACK(on_fbin), &inter);
 
      gtk_main();
      return 1;                                                             
  } 
+
+	     
+	     
+/* To disable for presentation
+
+gtk_widget_set_visible(GTK_WIDGET(inter->box_option),FALSE);
+
+
+
+*/
