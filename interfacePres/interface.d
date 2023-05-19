@@ -609,4 +609,6 @@ interfacePres/interface.o: interfacePres/interface.c \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
  /usr/include/gtk-3.0/gtk/gtk-autocleanups.h \
- interfacePres/../traitement/k_moyen.h
+ interfacePres/../traitement/k_moyen.h \
+ interfacePres/../reseau_interface/struct.h \
+ interfacePres/../reseau_interface/client.h

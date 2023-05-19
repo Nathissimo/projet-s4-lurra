@@ -282,7 +282,233 @@ sur la simplification</property>
               </object>
               <packing>
                 <property name="x">1240</property>
-                <property name="y">775</property>
+                <property name="y">800</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="message">
+                <property name="width-request">750</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+              </object>
+              <packing>
+                <property name="x">319</property>
+                <property name="y">710</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_send">
+                <property name="label" translatable="yes">envoyer</property>
+                <property name="width-request">100</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="x">1073</property>
+                <property name="y">710</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message1">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">600</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message12">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">500</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message11">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes">salut c est didier</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">600</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message13">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">400</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message14">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">300</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message15">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">200</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message16">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">175</property>
+                <property name="y">100</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message2">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">500</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message3">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">400</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message4">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">300</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message5">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">200</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="message6">
+                <property name="width-request">500</property>
+                <property name="height-request">80</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">750</property>
+                <property name="y">100</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="combo_list_name">
+                <property name="name">list_name_connect</property>
+                <property name="width-request">150</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="x">82</property>
+                <property name="y">730</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="name">
+                <property name="width-request">170</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="tooltip-text" translatable="yes">taper votre nom appuyer sur sauvegarder</property>
+              </object>
+              <packing>
+                <property name="x">10</property>
+                <property name="y">680</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_save_name">
+                <property name="label" translatable="yes">sauvegarder</property>
+                <property name="name">sauvegarder</property>
+                <property name="width-request">50</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="x">180</property>
+                <property name="y">680</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_quit_reseau">
+                <property name="label" translatable="yes">quitter le reseaux</property>
+                <property name="width-request">200</property>
+                <property name="height-request">40</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+              </object>
+              <packing>
+                <property name="x">54</property>
+                <property name="y">799</property>
               </packing>
             </child>
           </object>
