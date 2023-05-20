@@ -15,6 +15,7 @@
 
 #include "../reseau_interface/struct.h"
 #include "../reseau_interface/client.h"
+#include "../reseau_interface/list.h"
 
 //add
 #define SIZE 1024
@@ -22,7 +23,7 @@
 int cfd =0;
 int delete = 1;
 int connect_in_reseau = 0;
-
+list_connect* data_name = NULL;
 
 // interface
 typedef struct Inter
@@ -344,7 +345,7 @@ void on_send_message ( GtkButton * button, gpointer user_data)
 	//send the name and message in reseau
 	//send the name receiver
 	char* name_receiver = gtk_combo_box_text_get_active_text ( inter->combo_list_name);
-	
+
 	//if you don' t select people
 	if (name_receiver == NULL)
 	{
@@ -352,7 +353,7 @@ void on_send_message ( GtkButton * button, gpointer user_data)
 	}
 
 	send ( cfd, name_receiver, sizeof ( name_receiver), 0);
-
+	
 
 
 	//move old message
@@ -366,10 +367,10 @@ void on_send_message ( GtkButton * button, gpointer user_data)
 	sleep( 1);
 	//send the message in the reseau
 	send ( cfd, text_message, SIZE,0);
-	printf ("message send : %s\n", text_message);
-	
+	printf ("name %s , message send : %s\n",name_receiver ,text_message);
+
 	//clean a message
-	
+
 	gtk_entry_set_text ( inter->message, empty);
 	gtk_label_set_text ( inter->message11 , empty);
 
@@ -418,6 +419,8 @@ void on_new_name ( GtkEntry* button, gpointer user_data)
 	const char* new_name = gtk_entry_get_text ( inter->name);
 	gtk_combo_box_text_append ( inter->combo_list_name, NULL, new_name);
 
+	//list connect local
+	push_connect ( new_name, data_name);
 
 	// don't edit the name
 	gtk_editable_set_editable ( GTK_EDITABLE(inter->name), FALSE);	
@@ -446,9 +449,10 @@ void on_quit_reseau ( GtkButton * button, gpointer user_data)
 	gtk_entry_set_text ( inter->name, "");
 	gtk_combo_box_text_remove_all ( inter->combo_list_name);
 
-	
+	connect_in_reseau = 0;
+
 	if (button != NULL)
-                inter->usless = 1;
+		inter->usless = 1;
 }
 
 /*
@@ -467,42 +471,54 @@ void * thread_original ( void *arg)
 	Inter* inter =  arg;
 	int e;
 
-	while ( connect_in_reseau == 0)
-	{
-		sleep ( 1);
-	}
-
 	while (1)
 	{
-		char buf[SIZE];
-		e = read ( cfd , buf , SIZE );
+		while ( connect_in_reseau == 0)
+		{
+			sleep ( 1);
+		}
+
+		while (1)
+		{
+			char buf[SIZE];
+			e = read ( cfd , buf , SIZE );
+
+			printf ( "%s\n", buf);
+			if ( strcmp ( buf , "name") == 0  )
+			{
+				memset ( buf , 0, SIZE);
+				e = read ( cfd, buf, SIZE);
+				gtk_combo_box_text_append ( inter->combo_list_name , NULL , buf ) ;
+
+				//push name in data locail
+				push_connect ( buf , data_name);
+
+			}
+			else if ( strcmp ( buf, "message") == 0 )
+			{
+				memset ( buf, 0 , SIZE);
+				e = read ( cfd, buf, SIZE );
+				add_message (inter);
+				gtk_label_set_text ( inter->message11, buf);
+				gtk_label_set_text ( inter->message1, "");
+			}
+			else if ( strcmp ( buf, "delete") == 0)
+			{
+				memset ( buf, 0 , SIZE);
+				e = read ( cfd, buf, SIZE);
+				printf("%s\n", buf);
+
+				//pop name in data local
+				int index = pop_connect ( buf, data_name);
+				gtk_combo_box_text_remove ( inter->combo_list_name, index);
+
+			}
+			memset ( buf, 0 , SIZE);
+
+			if( connect_in_reseau == 0)
+				break;
 			
-		printf ( "%s\n", buf);
-		if ( strcmp ( buf , "name") == 0  )
-		{
-			memset ( buf , 0, SIZE);
-			e = read ( cfd, buf, SIZE);
-			gtk_combo_box_text_append ( inter->combo_list_name , NULL , buf ) ;
-
 		}
-		else if ( strcmp ( buf, "message") == 0 )
-		{
-			memset ( buf, 0 , SIZE);
-			e = read ( cfd, buf, SIZE );
-			add_message (inter);
-			gtk_label_set_text ( inter->message11, buf);
-			gtk_label_set_text ( inter->message1, "");
-		}
-		else if ( strcmp ( buf, "delete") == 0)
-		{
-			memset ( buf, 0 , SIZE);
-			e = read ( cfd, buf, SIZE);
-			printf("%s\n", buf);
-
-		}
-		memset ( buf, 0 , SIZE);
-
-
 	}
 	e++; //stop warning
 	return NULL;
@@ -617,7 +633,7 @@ int main()
 		GTK_LABEL (gtk_builder_get_object(builder, "message15"));
 	GtkLabel * message16 =
 		GTK_LABEL (gtk_builder_get_object(builder, "message16"));
-	
+
 	//quit button reseau
 	GtkButton * button_quit_reseau = 
 		GTK_BUTTON ( gtk_builder_get_object(builder, "button_quit_reseau" ));
@@ -701,6 +717,8 @@ int main()
 
 	if ( delete == 1 )
 	{
+		
+		data_name = init_list_connect();
 		printf ("listen server\n");
 		pthread_t pth;
 

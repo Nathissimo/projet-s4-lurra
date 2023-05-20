@@ -611,4 +611,5 @@ interfacePres/interface.o: interfacePres/interface.c \
  /usr/include/gtk-3.0/gtk/gtk-autocleanups.h \
  interfacePres/../traitement/k_moyen.h \
  interfacePres/../reseau_interface/struct.h \
- interfacePres/../reseau_interface/client.h
+ interfacePres/../reseau_interface/client.h \
+ interfacePres/../reseau_interface/list.h

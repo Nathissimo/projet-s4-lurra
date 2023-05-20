@@ -90,3 +90,23 @@ typedef struct struct_thread
 	UserKey* key;
 }struct_thread;
 
+
+//for message
+
+typedef struct list_message
+{
+	struct list_message* next;
+	char* message;
+	int host;
+}list_message;
+
+
+typedef struct list_connect
+{
+	struct list_connect* next;
+	const char* name;
+	list_message * list_message;
+}list_connect;
+
+
+

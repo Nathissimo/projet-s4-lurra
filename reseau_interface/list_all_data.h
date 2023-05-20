@@ -12,5 +12,5 @@ void pop_client ( all_data* all_data, int cfd );
 
 data_client* search_client (all_data* all_data, char* name);
 
-data_message* check_my_message ( all_data* all_data, char* name);
+data_message* check_my_message ( all_data* all_data, char* name, int * end);
 void push_message ( all_data* all_data, char* name, unsigned long* message, size_t size, char* sender);

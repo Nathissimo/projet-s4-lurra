@@ -90,6 +90,8 @@ void* thread_message ( void * arg)
 	char* name = struct_thread->name;
 	data_reseau* data_reseau = struct_thread->data_reseau;
 	UserKey* key_private_public = struct_thread->key;
+
+	int end = 0;
 	while ( 1)
 	{
 		sleep(1);
@@ -97,7 +99,11 @@ void* thread_message ( void * arg)
 		// check if you have a message
 
 		//char* rep = malloc (sizeof ( char)* SIZE_MESSAGE);
-		data_message* rep = check_my_message (data_reseau->all_data, name);
+		data_message* rep = check_my_message (data_reseau->all_data, name , &end);
+		if (end == 1)
+		{
+			break;
+		}
 
 		//first iteration
 		if ( rep != NULL)
@@ -123,7 +129,7 @@ void* thread_message ( void * arg)
 		while ( rep != NULL)
 		{
 
-			rep = check_my_message (data_reseau->all_data, name);
+			rep = check_my_message (data_reseau->all_data, name, &end);
 			if ( rep != NULL)
 			{
 				char* mess_decrypte = decrypte (rep->message, key_private_public, rep->size);
@@ -146,6 +152,7 @@ void* thread_message ( void * arg)
 
 		}
 	}
+	printf ("end thread message %s\n", name);
 	return NULL;
 
 
@@ -229,6 +236,7 @@ void send_mess ( data_reseau* data_reseau, int cfd, char* name, UserKey* key_pri
 	}
 
 
+
 }
 
 
@@ -289,7 +297,6 @@ void* worker(void* arg)
 			//delete all information in this cfd
 			printf ("delete information\n");
 
-			pop_client (data, cfd );
 			data_client* temp_delete_client = data->list_data_client->next;
 
 			//delete name in interface
@@ -301,6 +308,7 @@ void* worker(void* arg)
 
 			}
 
+			pop_client (data, cfd );
 			printf ("delete ok\n");
 			close (cfd);
 		}

@@ -6,7 +6,7 @@ CPPFLAGS =  # `pkg-config --cflags sdl2 SDL2_image SDL2_t    tf gtk+-3.0`
 LDLIBS = # -lm `pkg-config --libs sdl2 SDL2_image SDL2_ttf gtk+-3.0`
 LDFLAGS = -fsanitize=address
 
-interfaceobj =  traitement/k_moyen.o interfacePres/interface.o reseau_interface/client.o
+interfaceobj =  traitement/k_moyen.o interfacePres/interface.o reseau_interface/client.o reseau_interface/list.o
 
 traitementobj = k-moyenne/k_moyen.o
 

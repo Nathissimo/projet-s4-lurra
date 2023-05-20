@@ -171,7 +171,7 @@ data_client* search_client (all_data* all_data, char* name)
 }
 
 
-data_message* check_my_message ( all_data* all_data, char* name)
+data_message* check_my_message ( all_data* all_data, char* name, int* end)
 {
 	// find the cliend 
 	struct data_client* data_client = search_client ( all_data , name);
@@ -179,7 +179,11 @@ data_message* check_my_message ( all_data* all_data, char* name)
 
 	sem_wait ( &all_data->lock);
 	if (data_client == NULL)
-		errx (EXIT_FAILURE, "Error list or name or push");
+	{
+		*end = 1;
+		return NULL;
+		//errx (EXIT_FAILURE, "Error list or name or push");
+	}
 
 	// first message
 	struct data_message* all_message = data_client->message;
