@@ -341,7 +341,6 @@ sur la simplification</property>
                 <property name="height-request">80</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">salut c est didier</property>
               </object>
               <packing>
                 <property name="x">175</property>

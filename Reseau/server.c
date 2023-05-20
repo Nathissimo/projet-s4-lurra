@@ -131,6 +131,13 @@ void send_mess ( data_reseau* data_reseau, int cfd, char* name, UserKey* key_pri
 			UserKey* UserKey_receiver = receive_key_public ( );
 			UserKey_receiver->Public = data_client->key;
 			unsigned long* message_crypte = encryption( reponse, UserKey_receiver); //message crypte
+			
+			printf (" message crypte :");
+			for ( size_t i = 0 ; i < strlen(reponse); i++)
+			{
+				printf ( "%ld ", message_crypte[i]);
+			}
+			printf ( "\n");
 
 			push_message ( data_reseau->all_data,data_client->name ,message_crypte, strlen (reponse), name); //size is maybe not good	
 			
