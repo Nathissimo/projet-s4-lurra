@@ -524,7 +524,94 @@ void * thread_original ( void *arg)
 	return NULL;
 }
 
+void sauvegarderImage(const char* nomFichier, int largeur, int hauteur) {
+    // Ouvrir le fichier source en mode binaire pour lecture
+    FILE* fichierSource = fopen("new_surface.bmp", "rb");
+    if (fichierSource == NULL) {
+        printf("Erreur lors de l'ouverture du fichier source.\n");
+        return;
+    }
 
+    // Ouvrir le fichier de destination en mode binaire pour écriture
+    FILE* fichierDestination = fopen(nomFichier, "wb");
+    if (fichierDestination == NULL) {
+        printf("Erreur lors de l'ouverture du fichier de destination.\n");
+        fclose(fichierSource);
+        return;
+    }
+
+    // Calculer la taille totale des pixels de l'image
+    int taillePixels = largeur * hauteur * sizeof(int);
+
+    // Allouer un tampon pour lire les pixels de l'image source
+    int* pixels = (int*)malloc(taillePixels);
+    if (pixels == NULL) {
+        printf("Erreur lors de l'allocation de mémoire.\n");
+        fclose(fichierSource);
+        fclose(fichierDestination);
+        return;
+    }
+
+    // Lire les pixels de l'image source
+    int r = fread(pixels, sizeof(int), largeur * hauteur, fichierSource);
+	if (r == -1)
+		return;
+		
+    // Écrire les pixels dans le fichier de destination
+    fwrite(pixels, sizeof(int), largeur * hauteur, fichierDestination);
+
+    // Libérer la mémoire et fermer les fichiers
+    free(pixels);
+    fclose(fichierSource);
+    fclose(fichierDestination);
+}
+
+void on_ftelechargement(GtkButton *button, gpointer user_data)
+{
+	Inter *inter = user_data;
+	GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+    gint res;
+
+    // Création de la boîte de dialogue de sélection de fichier
+    dialog = gtk_file_chooser_dialog_new("Enregistrer l'image",
+                                         NULL,
+                                         action,
+                                         "_Cancel",
+                                         GTK_RESPONSE_CANCEL,
+                                         "_Save",
+                                         GTK_RESPONSE_ACCEPT,
+                                         NULL);
+
+    // Ajout de filtres d'extension d'image (facultatif)
+    GtkFileFilter *filter = gtk_file_filter_new();
+    gtk_file_filter_set_name(filter, "Images");
+    gtk_file_filter_add_mime_type(filter, "image/jpeg");
+    gtk_file_filter_add_mime_type(filter, "image/png");
+        gtk_file_filter_add_mime_type(filter, "image/bmp");
+    gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+    // Exécution de la boîte de dialogue
+    res = gtk_dialog_run(GTK_DIALOG(dialog));
+
+    if (res == GTK_RESPONSE_ACCEPT) {
+        char *filename;
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+        filename = gtk_file_chooser_get_filename(chooser);
+
+        // Enregistrer l'image à l'emplacement choisi
+        sauvegarderImage(filename,800,1000);
+
+        g_free(filename);
+    }
+
+    gtk_widget_destroy(dialog);
+    
+    if (button != NULL)
+	{
+		inter->usless = 1;
+	}
+}
 
 // Main function
 int main()
@@ -698,7 +785,7 @@ int main()
 
 	g_signal_connect(BImageSimplification, "clicked", G_CALLBACK(on_fimagesimplifie), &inter);
 	g_signal_connect(BImageBase, "clicked", G_CALLBACK(on_fimagebase), &inter);
-	//g_signal_connect(BTelechargement, "clicked", G_CALLBACK(on_fsolve), &inter);
+	g_signal_connect(BTelechargement, "clicked", G_CALLBACK(on_ftelechargement), &inter);
 
 
 	//add

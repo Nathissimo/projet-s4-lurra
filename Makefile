@@ -46,6 +46,6 @@ clean:
 	$(RM) $(OBJ)
 	$(RM) $(EXE)
 	$(RM) *.bmp
-	
-	
+	$(RM) *.png
+
 #END
