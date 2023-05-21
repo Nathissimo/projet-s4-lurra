@@ -117,13 +117,12 @@
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes">Présentation du projet :
 
-Le projet Lurra à été créer à l'occasion du 4ème semestre d'étude à l'EPITA. 
-Dans celui ci, vous pouvez retrouver du traitement d'image avec une simplification d'image sattelite, 
-du réseau avec de l'envoie d'image sécurisé avec du chiffrement et optimisé avec de la compression.
+Le projet Lurra a été créé à l'occasion du 4ème semestre d'étude à l'EPITA. 
+Dans celui-ci, vous pouvez retrouver du traitement d'images avec une simplification d'image satellite; 
+du réseau avec de l'envoi d'image sécurisé avec du chiffrement et optimisé avec de la compression.
 
-Cette interface vous permettra de découvrir 
-tout ceci de manière simple et efficace. 
-Il vous suffit de cliquer sur les bouton pour y décrouvrir les fonctionnalités.</property>
+Cette interface vous permettra de découvrir tout ceci de manière simple et efficace. 
+Il vous suffit de cliquer sur les boutons pour y découvrir les fonctionnalités.</property>
                 <attributes>
                   <attribute name="font-desc" value="Sans 10"/>
                   <attribute name="size" value="18432"/>
@@ -205,7 +204,7 @@ Il vous suffit de cliquer sur les bouton pour y décrouvrir les fonctionnalités
                 </child>
                 <child>
                   <object class="GtkButton" id="ImageSimplifie">
-                    <property name="label" translatable="yes">Image simplifié</property>
+                    <property name="label" translatable="yes">Image simplifiée</property>
                     <property name="height-request">50</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
@@ -273,7 +272,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="Quit">
-                <property name="label" translatable="yes">Quit</property>
+                <property name="label" translatable="yes">Quitter</property>
                 <property name="width-request">90</property>
                 <property name="height-request">37</property>
                 <property name="visible">True</property>
@@ -299,7 +298,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_send">
-                <property name="label" translatable="yes">envoyer</property>
+                <property name="label" translatable="yes">Envoyer</property>
                 <property name="width-request">100</property>
                 <property name="height-request">80</property>
                 <property name="visible">True</property>
@@ -474,7 +473,7 @@ sur la simplification</property>
                 <property name="height-request">40</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="tooltip-text" translatable="yes">taper votre nom appuyer sur sauvegarder</property>
+                <property name="tooltip-text" translatable="yes">Tapez votre nom appuyer sur sauvegarder</property>
               </object>
               <packing>
                 <property name="x">10</property>
@@ -483,7 +482,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_save_name">
-                <property name="label" translatable="yes">sauvegarder</property>
+                <property name="label" translatable="yes">Sauvegarder</property>
                 <property name="name">sauvegarder</property>
                 <property name="width-request">50</property>
                 <property name="height-request">40</property>
@@ -498,7 +497,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_quit_reseau">
-                <property name="label" translatable="yes">quitter le reseaux</property>
+                <property name="label" translatable="yes">Quitter le reseaux</property>
                 <property name="width-request">200</property>
                 <property name="height-request">40</property>
                 <property name="visible">True</property>

@@ -17,7 +17,7 @@ OBJ = $(traitementobj) $(crypteobj) $(interfaceobj)
 
 EXE = k-moyen crypte main
 
-all: traitement interface crypte
+all: interface
 
 traitement: CPPFLAGS += `pkg-config --cflags sdl2 SDL2_image` -MMD
 traitement: LDLIBS += `pkg-config --libs sdl2 SDL2_image` -lSDL_image -lm

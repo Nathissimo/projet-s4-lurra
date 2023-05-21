@@ -273,7 +273,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="Quit">
-                <property name="label" translatable="yes">Quit</property>
+                <property name="label" translatable="yes">Quitter</property>
                 <property name="width-request">90</property>
                 <property name="height-request">37</property>
                 <property name="visible">True</property>
@@ -299,7 +299,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_send">
-                <property name="label" translatable="yes">envoyer</property>
+                <property name="label" translatable="yes">Envoyer</property>
                 <property name="width-request">100</property>
                 <property name="height-request">80</property>
                 <property name="visible">True</property>
@@ -474,7 +474,7 @@ sur la simplification</property>
                 <property name="height-request">40</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="tooltip-text" translatable="yes">taper votre nom appuyer sur sauvegarder</property>
+                <property name="tooltip-text" translatable="yes">Tapez votre nom appuyer sur sauvegarder</property>
               </object>
               <packing>
                 <property name="x">10</property>
@@ -483,7 +483,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_save_name">
-                <property name="label" translatable="yes">sauvegarder</property>
+                <property name="label" translatable="yes">Sauvegarder</property>
                 <property name="name">sauvegarder</property>
                 <property name="width-request">50</property>
                 <property name="height-request">40</property>
@@ -498,7 +498,7 @@ sur la simplification</property>
             </child>
             <child>
               <object class="GtkButton" id="button_quit_reseau">
-                <property name="label" translatable="yes">quitter le reseaux</property>
+                <property name="label" translatable="yes">Quitter le reseaux</property>
                 <property name="width-request">200</property>
                 <property name="height-request">40</property>
                 <property name="visible">True</property>

@@ -122,7 +122,10 @@ void* thread_message ( void * arg)
 			sleep ( 0.1);
 			//print message
 			send ( cfd , mess_decrypte , rep->size, 0);
-
+			
+			//DELETE?
+			//sleep ( 0.1);
+			send ( cfd , rep->sender, 16, 0);
 			//free struct message
 
 		}
@@ -149,11 +152,17 @@ void* thread_message ( void * arg)
 				send ( cfd , mess_decrypte , rep->size, 0);
 				//free struct message
 
+
+				//DELETE?
+				sleep ( 0.1);
+				send ( cfd , rep->sender, 16, 0);
+
 			}
 
 		}
 	}
 	printf ("end thread message %s\n", name);
+
 	return NULL;
 
 
@@ -273,6 +282,9 @@ void* worker(void* arg)
 			data_client* temp_client = data->list_data_client->next; 
 			for ( ; temp_client != NULL ; temp_client = temp_client->next)
 			{
+				if ( temp_client->c == 0)
+					continue;
+
 				printf ( "cfd = %i\n", temp_client->cfd);
 				send ( temp_client->cfd, "name", sizeof ("name"),0);
 				send ( temp_client->cfd, name , sizeof (name), 0 );
@@ -304,12 +316,14 @@ void* worker(void* arg)
 			//delete name in interface
 			for ( ; temp_delete_client != NULL; temp_delete_client = temp_delete_client->next)
 			{
+				if ( temp_delete_client->c == 0)
+					continue;
+
 				printf ( "cfd = %i\n", temp_delete_client->cfd);
 				send ( temp_delete_client->cfd, "delete", sizeof ("delete"),0);
                                 send ( temp_delete_client->cfd, name , sizeof (name), 0 );
 
 			}
-
 			pop_client (data, cfd );
 			printf ("delete ok\n");
 			close (cfd);

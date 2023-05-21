@@ -360,7 +360,11 @@ void on_send_message ( GtkButton * button, gpointer user_data)
 	add_message (inter);	
 
 	//add new message
-	const char* text_message= gtk_entry_get_text(inter->message);
+	const char* text_message_1= gtk_entry_get_text(inter->message);
+	
+	char * text_message = calloc( SIZE, sizeof ( char));
+	strcpy ( text_message, text_message_1);
+
 	gtk_label_set_text ( inter->message1 , text_message);
 
 
@@ -373,6 +377,12 @@ void on_send_message ( GtkButton * button, gpointer user_data)
 
 	gtk_entry_set_text ( inter->message, empty);
 	gtk_label_set_text ( inter->message11 , empty);
+
+
+	//add message in struct message
+	list_message* list_message = seach_connect( name_receiver, data_name);
+	add_message_send ( text_message, list_message);
+
 
 
 	//printf ("send message : %s\n", text_message);
@@ -416,7 +426,11 @@ void on_new_name ( GtkEntry* button, gpointer user_data)
 		return;
 	}
 
-	const char* new_name = gtk_entry_get_text ( inter->name);
+	const char* new_name_1 = gtk_entry_get_text ( inter->name);
+	char* new_name = calloc(16, sizeof (char));
+	strcpy ( new_name, new_name_1);
+
+
 	gtk_combo_box_text_append ( inter->combo_list_name, NULL, new_name);
 
 	//list connect local
@@ -444,10 +458,11 @@ void on_quit_reseau ( GtkButton * button, gpointer user_data)
 	Inter * inter = user_data;
 
 	send ( cfd, "exit\n", sizeof ("exit\n"), 0);
+
 	gtk_editable_set_editable ( GTK_EDITABLE(inter->name), TRUE);
+	//gtk_combo_box_text_remove_all ( inter->combo_list_name);
 	inter->edit_name = 1;
 	gtk_entry_set_text ( inter->name, "");
-	gtk_combo_box_text_remove_all ( inter->combo_list_name);
 
 	connect_in_reseau = 0;
 
@@ -455,16 +470,42 @@ void on_quit_reseau ( GtkButton * button, gpointer user_data)
 		inter->usless = 1;
 }
 
-/*
-   void on_name_receiver ( GtkComboBoxText* button, gpointer user_data)
-   {
-   Inter * inter = user_data;
+
+void on_name_receiver ( GtkComboBoxText* button, gpointer user_data)
+{
+	Inter * inter = user_data;
+
+	char* name_receiver = gtk_combo_box_text_get_active_text (inter->combo_list_name);
+
+	list_message* list_message = seach_connect ( name_receiver, data_name);
+
+
+	//change the label text	
+	//right message
+	gtk_label_set_text ( inter->message6 , list_message->mes6);
+	gtk_label_set_text ( inter->message5 , list_message->mes5);
+	gtk_label_set_text ( inter->message4 , list_message->mes4);
+	gtk_label_set_text ( inter->message3 , list_message->mes3);
+	gtk_label_set_text ( inter->message2 , list_message->mes2);
+	gtk_label_set_text ( inter->message1 , list_message->mes1);
+
+	//meft message
+	gtk_label_set_text ( inter->message16 , list_message->mes16);
+	gtk_label_set_text ( inter->message15 , list_message->mes15);
+	gtk_label_set_text ( inter->message14 , list_message->mes14);
+	gtk_label_set_text ( inter->message13 , list_message->mes13);
+	gtk_label_set_text ( inter->message12 , list_message->mes12);
+	gtk_label_set_text ( inter->message11 , list_message->mes11);
 
 
 
-   }
 
-*/
+	if (button != NULL)
+                inter->usless = 1;
+
+
+}
+
 
 void * thread_original ( void *arg)
 {
@@ -486,31 +527,66 @@ void * thread_original ( void *arg)
 			printf ( "%s\n", buf);
 			if ( strcmp ( buf , "name") == 0  )
 			{
-				memset ( buf , 0, SIZE);
-				e = read ( cfd, buf, SIZE);
-				gtk_combo_box_text_append ( inter->combo_list_name , NULL , buf ) ;
+
+				char* buf_2 = calloc ( SIZE, sizeof ( char));;
+				e = read ( cfd, buf_2, SIZE);
+				gtk_combo_box_text_append ( inter->combo_list_name , NULL , buf_2 ) ;
 
 				//push name in data locail
-				push_connect ( buf , data_name);
+				printf ("name push :%s\n", buf_2);
+				push_connect ( buf_2 , data_name);
+
+				//printf ("%s ;;; %s\n", data_name->next->name, data_name->next->next->name);
 
 			}
 			else if ( strcmp ( buf, "message") == 0 )
 			{
-				memset ( buf, 0 , SIZE);
-				e = read ( cfd, buf, SIZE );
-				add_message (inter);
-				gtk_label_set_text ( inter->message11, buf);
-				gtk_label_set_text ( inter->message1, "");
+
+				sleep ( 0.01);
+				char* buf_2 = calloc ( SIZE, sizeof( char));
+
+				e = read ( cfd, buf_2, SIZE );
+
+				printf ("first : %s\n" , buf_2);
+				sleep ( 0.01);
+				char* buf_name = calloc ( SIZE, sizeof ( char));; 
+				e = read ( cfd, buf_name, SIZE);
+
+
+				//for add in struct message 
+				list_message* list_message = seach_connect ( buf_name, data_name);
+
+				add_message_receive ( buf_2, list_message);
+
+
+				if ( strcmp ( buf_name , gtk_combo_box_text_get_active_text( inter->combo_list_name)) == 0)
+				{
+					add_message (inter);
+
+					gtk_label_set_text ( inter->message11, buf_2);
+					gtk_label_set_text ( inter->message1, "");
+				}
+
 			}
 			else if ( strcmp ( buf, "delete") == 0)
 			{
-				memset ( buf, 0 , SIZE);
-				e = read ( cfd, buf, SIZE);
-				printf("%s\n", buf);
+				char* buf_2 = calloc ( SIZE, sizeof( char));
+				e = read ( cfd, buf_2, SIZE);
+				printf("%s\n", buf_2);
+				
+				//if name select in 
 
+				gtk_widget_set_sensitive(GTK_WIDGET(inter->button_send), FALSE);
+				while ( strcmp ( gtk_combo_box_text_get_active_text ( inter->combo_list_name), buf_2) == 0)
+				{
+					sleep (0.1);
+				}
+				
 				//pop name in data local
-				int index = pop_connect ( buf, data_name);
+				int index = pop_connect ( buf_2, data_name);
+				printf ("index : %i\n", index);
 				gtk_combo_box_text_remove ( inter->combo_list_name, index);
+				gtk_widget_set_sensitive(GTK_WIDGET(inter->button_send), TRUE);
 
 			}
 			memset ( buf, 0 , SIZE);
@@ -797,9 +873,8 @@ int main()
 
 	g_signal_connect(button_quit_reseau, "clicked", G_CALLBACK(on_quit_reseau), &inter);
 
-	//TODO
-	//for change the latex massage
-	//	g_signal_connect(combo_list_name, "changed", G_CALLBACK( on_name_receiver), &inter);
+	//for change label
+	g_signal_connect(combo_list_name, "changed", G_CALLBACK( on_name_receiver), &inter);
 
 
 	if ( delete == 1 )

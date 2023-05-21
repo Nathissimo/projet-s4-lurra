@@ -58,6 +58,7 @@ typedef struct data_client
 	struct data_client* next;
 	char* name;
 	int cfd;
+	int c;
 	Public_Private* key;
 	data_message *message;
 	
@@ -95,9 +96,20 @@ typedef struct struct_thread
 
 typedef struct list_message
 {
-	struct list_message* next;
-	char* message;
-	int host;
+	char* mes1;
+	char* mes2;
+	char* mes3;
+	char* mes4;
+	char* mes5;
+	char* mes6;
+
+	char* mes11;
+	char* mes12;
+	char* mes13;
+	char* mes14;
+	char* mes15;
+	char* mes16;
+
 }list_message;
 
 

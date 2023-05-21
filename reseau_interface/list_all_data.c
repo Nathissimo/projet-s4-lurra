@@ -68,6 +68,8 @@ void push_client ( all_data* all_data, char * name, int cfd, Public_Private* key
 	new_data_client->key = key;
 	new_data_client->name = name;
 	new_data_client->cfd = cfd;
+	new_data_client->c = 1;
+
 
 	struct data_message* sent_message = malloc (sizeof (struct data_message));
 	if (sent_message == NULL)
@@ -106,12 +108,9 @@ void pop_client ( all_data* all_data, int cfd )
 		{
 			//delete data client
 
-			temp_client->next = data_client->next;
+			data_client->c = 0;
+			//temp_client->next = data_client->next;
 
-			//free the struct 
-
-			free ( data_client->key);
-			free ( data_client->message);
 			//delete_message_data (data_client->message, all_data);
 
 			sem_post (&all_data->lock);
@@ -124,12 +123,9 @@ void pop_client ( all_data* all_data, int cfd )
 	{
 		//delete data client
 
-		temp_client->next = data_client->next;
+		data_client->c = 0;
+		//temp_client->next = data_client->next;
 
-		//free the struct 
-
-		free ( data_client->key);
-		free ( data_client->message);
 //		delete_message_data (data_client->message, all_data);
 
 		sem_post (&all_data->lock);
@@ -138,7 +134,6 @@ void pop_client ( all_data* all_data, int cfd )
 
 
 	sem_post (&all_data->lock);
-	printf ("pb because this cfd don't exist");
 }
 
 
