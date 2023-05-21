@@ -122,7 +122,7 @@ void on_fimagesimplifie(GtkButton *button, gpointer user_data)
 {
 	Inter *inter = user_data;
 	inter->pix = gdk_pixbuf_new_from_file(
-			"new_surface.bmp", NULL);
+			"temp_files/new_surface.bmp", NULL);
 	gtk_image_set_from_pixbuf(inter->GImage, inter->pix);
 	if (button != NULL)
 	{
@@ -134,7 +134,7 @@ void on_fimagebase(GtkButton *button, gpointer user_data)
 {
 	Inter *inter = user_data;
 	inter->pix = gdk_pixbuf_new_from_file(
-			"old_surface.bmp", NULL);
+			"temp_files/old_surface.bmp", NULL);
 	gtk_image_set_from_pixbuf(inter->GImage, inter->pix);
 	if (button != NULL)
 	{
@@ -602,7 +602,7 @@ void * thread_original ( void *arg)
 
 void sauvegarderImage(const char* nomFichier, int largeur, int hauteur) {
     // Ouvrir le fichier source en mode binaire pour lecture
-    FILE* fichierSource = fopen("new_surface.bmp", "rb");
+    FILE* fichierSource = fopen("temp_files/new_surface.bmp", "rb");
     if (fichierSource == NULL) {
         printf("Erreur lors de l'ouverture du fichier source.\n");
         return;

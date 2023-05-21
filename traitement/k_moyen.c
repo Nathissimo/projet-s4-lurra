@@ -190,7 +190,7 @@ int k_moyen (char* image, int k, int nb_iteration)
     int basew = 800;
     surface = RedimensionnerImage(surface, baseh, basew);
 
-    SDL_SaveBMP(surface , "old_surface.bmp");
+    SDL_SaveBMP(surface , "temp_files/old_surface.bmp");
 
     int* pix = malloc ( sizeof(int) * k); 
 
@@ -278,7 +278,7 @@ int k_moyen (char* image, int k, int nb_iteration)
     // loop to make the result more precise
 
 
-    SDL_SaveBMP(res_surface , "first_surface.bmp");
+    SDL_SaveBMP(res_surface , "temp_files/first_surface.bmp");
 
     for ( int i = 0 ; i < nb_iteration ; i++)
     {
@@ -304,7 +304,7 @@ int k_moyen (char* image, int k, int nb_iteration)
 
     res_surface = RedimensionnerImage(res_surface, baseh, basew);
 
-    SDL_SaveBMP(res_surface , "new_surface.bmp");
+    SDL_SaveBMP(res_surface , "temp_files/new_surface.bmp");
 
     //Free all element
 
