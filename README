@@ -1,5 +1,18 @@
-Repo pour le projet de s4
+Projet S4 Lurra EPITA
 
+Membre du groupe :
 
+Ronan PEZENNEC
+Nathan SIMONIN
 
-Ronan Pezennec
+INSTALLATION :
+
+Pour installer le projet Lurra, vous pouvez aller sur le site web avec l'adresse suivante : https://sites.google.com/view/projet-s4-lurra/
+Il vous suffira après d'aller sur la page de téléchargement, puis d'aller sur le lien au dessus de "ProjetLurra.zip".
+Dézippé le dossier et le tour est joué !
+
+UTILISATION :
+
+Vous avez 2 executables, main et server.
+Pour lancer l'interface graphique, vous pouvez écrire ./main. Ensuite, vous avez seulement à suivre les instructions.
+De plus pour utiliser la messagerie, il faut d'abord écrire "./server" dans le terminal et vous pouvez continuer votre naivgation sur l'interface.
