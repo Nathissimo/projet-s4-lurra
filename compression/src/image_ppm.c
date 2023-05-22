@@ -59,10 +59,10 @@ char* nom_fichier_sortie(const char *filename, uint8_t nb_composante) {
 
     while(filename[index_point] != '.')
         index_point ++;
-    nom_sortie[index_point + 1] = 'p';
+    nom_sortie[index_point + 1] = 'j';
     nom_sortie[index_point + 2] = 'p';
     if(nb_composante == 1) nom_sortie[index_point + 2] = 'g';
-    nom_sortie[index_point + 3] = 'm';
+    nom_sortie[index_point + 3] = 'g';
     nom_sortie[index_point + 4] = '\0';
 
     return nom_sortie;

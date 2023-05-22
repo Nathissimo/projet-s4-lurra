@@ -22,7 +22,7 @@ OBJ_FILES =  $(OBJ_DIR)/main.o $(OBJ_DIR)/decodage_MCU.o $(OBJ_DIR)/image_ppm.o 
 
 # cible par défaut
 
-TARGET = $(BIN_DIR)/jpeg2ppm
+TARGET = $(BIN_DIR)/perte
 
 all: $(TARGET)
 
@@ -56,5 +56,5 @@ $(OBJ_DIR)/bitstream.o: $(SRC_DIR)/bitstream.c
 
 clean:
 	rm -f $(TARGET) $(OBJ_FILES)
-	rm -f images/*.pgm images/*.ppm
+
 

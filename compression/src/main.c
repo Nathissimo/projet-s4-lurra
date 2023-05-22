@@ -22,10 +22,10 @@ void verifie_extension(const char *filename) {
         fprintf(stderr, "Nom de fichier invalide\n");
         exit(1);
     }
-    if(strcmp(extension, ".jpg") && strcmp(extension, ".jpeg") && strcmp(extension, ".JPG")) {
-        fprintf(stderr, "Extension du fichier invalide, attendu : .jpg .jpeg .JPG\n");
-        exit(1);
-    }
+    //if(strcmp(extension, ".jpg") && strcmp(extension, ".jpeg") && strcmp(extension, ".JPG")) {
+    //    fprintf(stderr, "Extension du fichier invalide, attendu : .jpg .jpeg .JPG\n");
+    //    exit(1);
+    //}
 }
 
 int main(int argc, char **argv) {
