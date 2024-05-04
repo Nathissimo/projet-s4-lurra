@@ -16,3 +16,7 @@ UTILISATION :
 Vous avez 2 executables, main et server.
 Pour lancer l'interface graphique, vous pouvez écrire ./main. Ensuite, vous avez seulement à suivre les instructions.
 De plus pour utiliser la messagerie, il faut d'abord écrire "./server" dans le terminal et vous pouvez continuer votre naivgation sur l'interface.
+
+Libs:
+- GTK
+- SDL
